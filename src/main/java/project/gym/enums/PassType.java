@@ -1,7 +1,7 @@
-package project.gym;
+package project.gym.enums;
 
 public enum PassType {
-    Student,
-    Indefinite,
-    Year
+    STUDENT,
+    INDEFINITE,
+    YEAR
 }

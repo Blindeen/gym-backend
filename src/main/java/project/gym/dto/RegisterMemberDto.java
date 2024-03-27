@@ -1,7 +1,6 @@
 package project.gym.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import project.gym.model.Contact;
 import project.gym.model.Member;
@@ -9,9 +8,7 @@ import project.gym.model.Member;
 import java.util.Date;
 
 @Data
-public class RegisterUserDto {
-    @Size(min = 2, message = "First name must be at least 2 characters long")
-
+public class RegisterMemberDto {
     @NotEmpty(message = "First name is required")
     private String firstName;
 

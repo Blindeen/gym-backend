@@ -2,8 +2,10 @@ package project.gym.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import project.gym.enums.Role;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -11,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
-public class User {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,8 +31,19 @@ public class User {
     private String password;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date birthdate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'CUSTOMER'")
+    private Role role = Role.CUSTOMER;
+
     @Column(columnDefinition = "boolean default false")
-    private boolean archived;
+    private boolean archived = false;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Contact contact;
+
+    @ManyToMany
+    private Set<Activity> activities;
 }
