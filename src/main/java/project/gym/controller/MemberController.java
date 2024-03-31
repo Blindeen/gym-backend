@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import project.gym.dto.AuthenticationResponse;
 import project.gym.dto.LoginMemberDto;
 import project.gym.dto.RegisterMemberDto;
-import project.gym.service.AuthenticationService;
 import project.gym.service.MemberService;
 
 @RestController
@@ -16,19 +15,13 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
-
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody @Valid RegisterMemberDto request) {
-        AuthenticationResponse authenticationResponse;
-        authenticationResponse = authenticationService.register(request);
-
-        return ResponseEntity.ok(authenticationResponse);
+        return ResponseEntity.ok(memberService.register(request));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginMemberDto request) {
-        return ResponseEntity.ok(authenticationService.authentication(request));
+        return ResponseEntity.ok(memberService.authentication(request));
     }
 }
