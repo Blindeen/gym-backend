@@ -33,4 +33,10 @@ public class Activity {
 
     @ManyToMany(mappedBy = "activities")
     private Set<Member> members;
+
+    @ManyToOne
+    private Room room;
+
+    @ManyToOne
+    private Member trainer;
 }

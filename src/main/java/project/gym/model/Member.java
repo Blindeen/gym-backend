@@ -52,6 +52,15 @@ public class Member implements UserDetails {
     @ManyToMany
     private Set<Activity> activities;
 
+    @ManyToOne
+    private Pass pass;
+
+    @ManyToOne
+    private PaymentMethod paymentMethod;
+
+    @OneToMany(mappedBy = "trainer")
+    private Set<Activity> trainerActivities;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
