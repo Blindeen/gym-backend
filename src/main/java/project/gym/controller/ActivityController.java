@@ -15,8 +15,11 @@ public class ActivityController {
     private ActivityService activityService;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> create(@RequestBody @Valid CreateActivityDto request) {
-        activityService.create(request);
+    public ResponseEntity<Object> create(
+            @RequestHeader("Authorization") String token,
+            @RequestBody @Valid CreateActivityDto request
+    ) {
+        activityService.create(request, token);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

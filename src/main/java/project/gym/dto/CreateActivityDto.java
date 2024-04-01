@@ -22,6 +22,9 @@ public class CreateActivityDto {
     @NotNull(message = "End time is required")
     private LocalTime endTime;
 
+    @NotNull(message = "Room id is required")
+    private Long roomId;
+
     public Activity toActivity() {
         return new Activity()
                 .withName(name)
