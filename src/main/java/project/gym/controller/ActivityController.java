@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.gym.dto.ActivityResponseDto;
 import project.gym.dto.CreateActivityDto;
 import project.gym.service.ActivityService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -21,6 +24,12 @@ public class ActivityController {
     ) {
         activityService.create(request, token);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<Object> read() {
+        List<ActivityResponseDto> activities = activityService.read();
+        return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")

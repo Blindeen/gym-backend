@@ -2,8 +2,10 @@ package project.gym.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
+import project.gym.dto.ActivityResponseDto;
 import project.gym.dto.CreateActivityDto;
 import project.gym.exception.ActivityDoesNotExist;
 import project.gym.exception.RoomDoesNotExist;
@@ -12,6 +14,8 @@ import project.gym.model.Member;
 import project.gym.model.Room;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.RoomRepo;
+
+import java.util.List;
 
 @Service
 public class ActivityService {
@@ -34,8 +38,8 @@ public class ActivityService {
         activityRepo.save(newActivity);
     }
 
-    public void delete(Long id) {
-        activityRepo.deleteById(id);
+    public List<ActivityResponseDto> read() {
+        return Streamable.of(activityRepo.findAll()).map(ActivityResponseDto::valueOf).toList();
     }
 
     @Transactional
@@ -51,5 +55,9 @@ public class ActivityService {
         }
 
         activityRepo.save(activity);
+    }
+
+    public void delete(Long id) {
+        activityRepo.deleteById(id);
     }
 }
