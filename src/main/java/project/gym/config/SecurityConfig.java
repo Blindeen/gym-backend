@@ -41,7 +41,7 @@ public class SecurityConfig {
                                         "/api/activity/{id}/update",
                                         "/api/activity/{id}/delete"
                                 )
-                                .hasAuthority(String.valueOf(Role.TRAINER))
+                                .hasRole(String.valueOf(Role.TRAINER))
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsImplService)
