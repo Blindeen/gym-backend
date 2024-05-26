@@ -18,6 +18,8 @@ public class ActivityResponseDto {
 
     private Long room;
 
+    private TrainerDto trainer;
+
     public static ActivityResponseDto valueOf(Activity activity) {
         ActivityResponseDto activityResponseDto = new ActivityResponseDto();
         activityResponseDto.name = activity.getName();
@@ -25,6 +27,7 @@ public class ActivityResponseDto {
         activityResponseDto.startTime = activity.getStartTime();
         activityResponseDto.endTime = activity.getEndTime();
         activityResponseDto.room = activity.getRoom().getNumber();
+        activityResponseDto.trainer = TrainerDto.valueOf(activity.getTrainer());
 
         return activityResponseDto;
     }
