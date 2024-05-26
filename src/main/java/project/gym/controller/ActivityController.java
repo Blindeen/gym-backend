@@ -28,21 +28,24 @@ public class ActivityController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> read(@RequestParam(defaultValue = "0") int pageNumber, @RequestParam(defaultValue = "5") int pageSize) {
+    public ResponseEntity<Object> read(
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "5") int pageSize
+    ) {
         Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
         Page<ActivityResponseDto> activities = activityService.read(pageableRequest);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        activityService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}/update")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityDto requestBody) {
         ActivityResponseDto activity = activityService.update(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
+        activityService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
