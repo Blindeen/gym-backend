@@ -28,14 +28,15 @@ public class ActivityService {
     @Autowired
     private JwtService jwtService;
 
-    public void create(CreateActivityDto request, String token) {
+    public ActivityResponseDto create(CreateActivityDto request, String token) {
         Activity newActivity = request.toActivity();
         Member trainer = jwtService.getMember(token);
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
 
         newActivity.setRoom(room);
         newActivity.setTrainer(trainer);
-        activityRepo.save(newActivity);
+        newActivity = activityRepo.save(newActivity);
+        return ActivityResponseDto.valueOf(newActivity);
     }
 
     public Page<ActivityResponseDto> read(Pageable pageable) {
@@ -43,7 +44,7 @@ public class ActivityService {
     }
 
     @Transactional
-    public void update(Long id, CreateActivityDto request) {
+    public ActivityResponseDto update(Long id, CreateActivityDto request) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
 
         activity.setName(request.getName() != null ? request.getName() : activity.getName());
@@ -54,7 +55,8 @@ public class ActivityService {
             activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
         }
 
-        activityRepo.save(activity);
+        activity = activityRepo.save(activity);
+        return ActivityResponseDto.valueOf(activity);
     }
 
     public void delete(Long id) {
