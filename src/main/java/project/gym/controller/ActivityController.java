@@ -2,14 +2,15 @@ package project.gym.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.dto.ActivityResponseDto;
 import project.gym.dto.CreateActivityDto;
 import project.gym.service.ActivityService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -28,7 +29,8 @@ public class ActivityController {
 
     @GetMapping("/list")
     public ResponseEntity<Object> read() {
-        List<ActivityResponseDto> activities = activityService.read();
+        Pageable pageableRequest = PageRequest.of(0, 2);
+        Page<ActivityResponseDto> activities = activityService.read(pageableRequest);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 

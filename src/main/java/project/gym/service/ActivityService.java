@@ -2,7 +2,8 @@ package project.gym.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Streamable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
 import project.gym.dto.ActivityResponseDto;
@@ -15,7 +16,6 @@ import project.gym.model.Room;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.RoomRepo;
 
-import java.util.List;
 
 @Service
 public class ActivityService {
@@ -38,8 +38,8 @@ public class ActivityService {
         activityRepo.save(newActivity);
     }
 
-    public List<ActivityResponseDto> read() {
-        return Streamable.of(activityRepo.findAll()).map(ActivityResponseDto::valueOf).toList();
+    public Page<ActivityResponseDto> read(Pageable pageable) {
+        return activityRepo.findAll(pageable).map(ActivityResponseDto::valueOf);
     }
 
     @Transactional
