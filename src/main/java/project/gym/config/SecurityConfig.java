@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import project.gym.enums.Role;
 import project.gym.service.UserDetailsImplService;
 
 @Configuration
@@ -35,6 +36,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req.requestMatchers("/api/member/login", "/api/member/register")
                                 .permitAll()
+                                .requestMatchers(
+                                        "/api/activity/create",
+                                        "/api/activity/{id}/update",
+                                        "/api/activity/{id}/delete"
+                                )
+                                .hasAuthority(String.valueOf(Role.TRAINER))
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsImplService)
