@@ -8,6 +8,8 @@ import java.time.LocalTime;
 
 @Data
 public class ActivityResponseDto {
+    private Long id;
+
     private String name;
 
     private DayOfWeek dayOfWeek;
@@ -22,6 +24,7 @@ public class ActivityResponseDto {
 
     public static ActivityResponseDto valueOf(Activity activity) {
         ActivityResponseDto activityResponseDto = new ActivityResponseDto();
+        activityResponseDto.id = activity.getId();
         activityResponseDto.name = activity.getName();
         activityResponseDto.dayOfWeek = activity.getDayOfWeek();
         activityResponseDto.startTime = activity.getStartTime();
