@@ -3,6 +3,7 @@ package project.gym.dto;
 import lombok.Data;
 import project.gym.enums.DayOfWeek;
 import project.gym.model.Activity;
+import project.gym.model.Room;
 
 import java.time.LocalTime;
 
@@ -18,7 +19,7 @@ public class ActivityResponseDto {
 
     private LocalTime endTime;
 
-    private Long room;
+    private Room room;
 
     private TrainerDto trainer;
 
@@ -29,7 +30,7 @@ public class ActivityResponseDto {
         activityResponseDto.dayOfWeek = activity.getDayOfWeek();
         activityResponseDto.startTime = activity.getStartTime();
         activityResponseDto.endTime = activity.getEndTime();
-        activityResponseDto.room = activity.getRoom().getNumber();
+        activityResponseDto.room = activity.getRoom();
         activityResponseDto.trainer = TrainerDto.valueOf(activity.getTrainer());
 
         return activityResponseDto;

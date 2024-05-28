@@ -1,5 +1,6 @@
 package project.gym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,8 @@ public class Room {
     private long id;
 
     @Column(unique = true, nullable = false)
-    private long number;
+    private String name;
 
+    @JsonIgnore
     private long personLimit;
 }
