@@ -28,7 +28,7 @@ public class ActivityController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> read(
+    public ResponseEntity<Object> list(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
