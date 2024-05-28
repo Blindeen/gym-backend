@@ -1,4 +1,4 @@
-package project.gym.dto;
+package project.gym.dto.activity;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +21,9 @@ public class CreateActivityDto {
 
     @NotNull(message = "End time is required")
     private LocalTime endTime;
+
+    @NotNull(message = "Room id is required")
+    private Long roomId;
 
     public Activity toActivity() {
         return new Activity()

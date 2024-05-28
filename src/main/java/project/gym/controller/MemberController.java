@@ -4,13 +4,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.dto.AuthenticationResponse;
-import project.gym.dto.LoginMemberDto;
-import project.gym.dto.RegisterMemberDto;
+import project.gym.dto.authentication.AuthenticationResponse;
+import project.gym.dto.authentication.LoginMemberDto;
+import project.gym.dto.authentication.RegisterMemberDto;
 import project.gym.service.MemberService;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/member")
 public class MemberController {
     @Autowired
     private MemberService memberService;

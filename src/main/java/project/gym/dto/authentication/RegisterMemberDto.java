@@ -1,4 +1,4 @@
-package project.gym.dto;
+package project.gym.dto.authentication;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

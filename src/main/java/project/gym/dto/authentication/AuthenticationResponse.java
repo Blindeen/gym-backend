@@ -1,4 +1,4 @@
-package project.gym.dto;
+package project.gym.dto.authentication;
 
 import lombok.Getter;
 import lombok.Setter;

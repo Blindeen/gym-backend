@@ -39,4 +39,13 @@ public class Activity {
 
     @ManyToOne
     private Member trainer;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Activity activity) {
+            return id == activity.getId();
+        }
+
+        return false;
+    }
 }

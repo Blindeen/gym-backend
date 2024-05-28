@@ -4,10 +4,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Member;
+import project.gym.repo.MemberRepo;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -17,6 +20,9 @@ import java.util.function.Function;
 public class JwtService {
     @Value("${jwt.secret}")
     private String JWT_SECRET;
+
+    @Autowired
+    private MemberRepo memberRepo;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -63,5 +69,10 @@ public class JwtService {
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64URL.decode(JWT_SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public Member getMember(String token) {
+        String email = extractUsername(token.substring(7));
+        return memberRepo.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
     }
 }
