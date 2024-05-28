@@ -1,4 +1,4 @@
-package project.gym.dto;
+package project.gym.dto.activity;
 
 import lombok.Data;
 import project.gym.model.Member;

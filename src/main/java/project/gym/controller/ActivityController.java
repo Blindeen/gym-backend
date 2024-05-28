@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.dto.ActivityResponseDto;
-import project.gym.dto.CreateActivityDto;
+import project.gym.dto.activity.ActivityResponseDto;
+import project.gym.dto.activity.CreateActivityDto;
 import project.gym.service.ActivityService;
 
 @RestController

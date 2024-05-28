@@ -7,9 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
-import project.gym.dto.AuthenticationResponse;
-import project.gym.dto.LoginMemberDto;
-import project.gym.dto.RegisterMemberDto;
+import project.gym.dto.authentication.AuthenticationResponse;
+import project.gym.dto.authentication.LoginMemberDto;
+import project.gym.dto.authentication.RegisterMemberDto;
 import project.gym.exception.EmailAlreadyExistException;
 import project.gym.model.Contact;
 import project.gym.model.Member;
