@@ -10,7 +10,7 @@ import project.gym.dto.authentication.RegisterMemberDto;
 import project.gym.service.MemberService;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/member")
 public class MemberController {
     @Autowired
     private MemberService memberService;

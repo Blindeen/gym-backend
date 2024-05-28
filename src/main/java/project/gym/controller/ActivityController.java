@@ -15,7 +15,7 @@ import project.gym.model.Member;
 import project.gym.service.ActivityService;
 
 @RestController
-@RequestMapping("/api/activity")
+@RequestMapping("/activity")
 public class ActivityController {
     @Autowired
     private ActivityService activityService;

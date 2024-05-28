@@ -14,8 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import project.gym.enums.Role;
 import project.gym.service.UserDetailsImplService;
+
+import static project.gym.constant.ApiEndpoints.*;
 
 @Configuration
 @EnableWebSecurity
@@ -34,15 +37,15 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers("/api/member/login", "/api/member/register")
+                        req -> req.requestMatchers(LOGIN, REGISTER)
                                 .permitAll()
                                 .requestMatchers(
-                                        "/api/activity/create",
-                                        "/api/activity/{id}/update",
-                                        "/api/activity/{id}/delete"
+                                        CREATE_ACTIVITY,
+                                        UPDATE_ACTIVITY,
+                                        DELETE_ACTIVITY
                                 )
                                 .hasRole(String.valueOf(Role.TRAINER))
-                                .requestMatchers("/api/activity/{id}/enroll", "/api/activity/{id}/leave")
+                                .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY)
                                 .hasRole(String.valueOf(Role.CUSTOMER))
                                 .anyRequest()
                                 .authenticated()
