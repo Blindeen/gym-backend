@@ -23,7 +23,7 @@ public class ActivityController {
             @RequestHeader("Authorization") String token,
             @RequestBody @Valid CreateActivityDto requestBody
     ) {
-        ActivityResponseDto newActivity = activityService.create(requestBody, token);
+        ActivityResponseDto newActivity = activityService.createActivity(requestBody, token);
         return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
     }
 
@@ -33,19 +33,19 @@ public class ActivityController {
             @RequestParam(defaultValue = "5") int pageSize
     ) {
         Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
-        Page<ActivityResponseDto> activities = activityService.read(pageableRequest);
+        Page<ActivityResponseDto> activities = activityService.listActivities(pageableRequest);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityDto requestBody) {
-        ActivityResponseDto activity = activityService.update(id, requestBody);
+        ActivityResponseDto activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
-        activityService.delete(id);
+        activityService.deleteActivity(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

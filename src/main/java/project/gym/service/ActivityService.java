@@ -1,6 +1,5 @@
 package project.gym.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,7 @@ public class ActivityService {
     @Autowired
     private JwtService jwtService;
 
-    public ActivityResponseDto create(CreateActivityDto request, String token) {
+    public ActivityResponseDto createActivity(CreateActivityDto request, String token) {
         Activity newActivity = request.toActivity();
         Member trainer = jwtService.getMember(token);
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
@@ -39,12 +38,11 @@ public class ActivityService {
         return ActivityResponseDto.valueOf(newActivity);
     }
 
-    public Page<ActivityResponseDto> read(Pageable pageable) {
+    public Page<ActivityResponseDto> listActivities(Pageable pageable) {
         return activityRepo.findAll(pageable).map(ActivityResponseDto::valueOf);
     }
 
-    @Transactional
-    public ActivityResponseDto update(Long id, CreateActivityDto request) {
+    public ActivityResponseDto updateActivity(Long id, CreateActivityDto request) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
 
         activity.setName(request.getName() != null ? request.getName() : activity.getName());
@@ -59,7 +57,7 @@ public class ActivityService {
         return ActivityResponseDto.valueOf(activity);
     }
 
-    public void delete(Long id) {
+    public void deleteActivity(Long id) {
         activityRepo.deleteById(id);
     }
 }
