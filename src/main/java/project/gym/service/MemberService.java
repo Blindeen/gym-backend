@@ -44,7 +44,7 @@ public class MemberService {
 
         String token = jwtService.generateToken(newMember);
 
-        return new AuthenticationResponseDto(token);
+        return new AuthenticationResponseDto(newMember, token);
     }
 
     public AuthenticationResponseDto login(LoginMemberDto request) {
@@ -58,6 +58,6 @@ public class MemberService {
         Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.generateToken(member);
 
-        return new AuthenticationResponseDto(token);
+        return new AuthenticationResponseDto(member, token);
     }
 }
