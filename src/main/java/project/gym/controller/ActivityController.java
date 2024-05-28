@@ -55,13 +55,23 @@ public class ActivityController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{id}/enroll")
+    @PostMapping("/{id}/enroll")
     public ResponseEntity<Object> enroll(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {
         Member member = jwtService.getMember(token);
         activityService.enrollForActivity(id, member);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/leave")
+    public ResponseEntity<Object> leave(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token
+    ) {
+        Member member = jwtService.getMember(token);
+        activityService.leaveActivity(id, member);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

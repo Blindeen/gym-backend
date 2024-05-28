@@ -90,4 +90,13 @@ public class Member implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Member member) {
+            return id == member.getId();
+        }
+
+        return false;
+    }
 }

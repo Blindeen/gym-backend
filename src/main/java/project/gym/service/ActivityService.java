@@ -73,4 +73,16 @@ public class ActivityService {
         activityRepo.save(activity);
         memberRepo.save(member);
     }
+
+    @Transactional
+    public void leaveActivity(Long id, Member member) {
+        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+        member = memberRepo.findById(member.getId()).orElseThrow(UserDoesNotExistException::new);
+
+        activity.getMembers().remove(member);
+        member.getActivities().remove(activity);
+
+        activityRepo.save(activity);
+        memberRepo.save(member);
+    }
 }
