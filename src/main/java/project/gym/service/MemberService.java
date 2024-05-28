@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
-import project.gym.dto.authentication.AuthenticationResponse;
+import project.gym.dto.authentication.AuthenticationResponseDto;
 import project.gym.dto.authentication.LoginMemberDto;
 import project.gym.dto.authentication.RegisterMemberDto;
 import project.gym.exception.EmailAlreadyExistException;
@@ -29,7 +29,7 @@ public class MemberService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterMemberDto request) {
+    public AuthenticationResponseDto register(RegisterMemberDto request) {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
@@ -44,10 +44,10 @@ public class MemberService {
 
         String token = jwtService.generateToken(newMember);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponseDto(token);
     }
 
-    public AuthenticationResponse authentication(LoginMemberDto request) {
+    public AuthenticationResponseDto login(LoginMemberDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -58,6 +58,6 @@ public class MemberService {
         Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.generateToken(member);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponseDto(token);
     }
 }
