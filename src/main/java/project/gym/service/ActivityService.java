@@ -1,14 +1,15 @@
 package project.gym.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.gym.dto.activity.ActivityResponseDto;
 import project.gym.dto.activity.CreateActivityDto;
 import project.gym.exception.ActivityDoesNotExist;
 import project.gym.exception.RoomDoesNotExist;
+import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Activity;
 import project.gym.model.Member;
 import project.gym.model.Room;
@@ -64,6 +65,7 @@ public class ActivityService {
     @Transactional
     public void enrollForActivity(Long id, Member member) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+        member = memberRepo.findById(member.getId()).orElseThrow(UserDoesNotExistException::new);
 
         activity.getMembers().add(member);
         member.getActivities().add(activity);
