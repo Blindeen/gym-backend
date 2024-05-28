@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.gym.dto.activity.ActivityResponseDto;
 import project.gym.dto.activity.CreateActivityDto;
 import project.gym.exception.ActivityDoesNotExist;
+import project.gym.exception.AlreadyEnrolledException;
 import project.gym.exception.RoomDoesNotExist;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Activity;
@@ -67,7 +68,10 @@ public class ActivityService {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
         member = memberRepo.findById(member.getId()).orElseThrow(UserDoesNotExistException::new);
 
-        activity.getMembers().add(member);
+        boolean isAlreadyEnrolled = activity.getMembers().add(member);
+        if (!isAlreadyEnrolled) {
+            throw new AlreadyEnrolledException();
+        }
         member.getActivities().add(activity);
 
         activityRepo.save(activity);
