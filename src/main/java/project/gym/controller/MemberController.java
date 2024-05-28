@@ -2,6 +2,7 @@ package project.gym.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.dto.authentication.AuthenticationResponseDto;
@@ -17,11 +18,13 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid RegisterMemberDto request) {
-        return ResponseEntity.ok(memberService.register(request));
+        AuthenticationResponseDto responseBody = memberService.register(request);
+        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> login(@RequestBody @Valid LoginMemberDto request) {
-        return ResponseEntity.ok(memberService.login(request));
+        AuthenticationResponseDto responseBody = memberService.login(request);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }
