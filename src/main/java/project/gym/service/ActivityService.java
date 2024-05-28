@@ -1,10 +1,10 @@
 package project.gym.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponseDto;
 import project.gym.dto.activity.CreateActivityDto;
 import project.gym.exception.ActivityDoesNotExist;
@@ -13,6 +13,7 @@ import project.gym.model.Activity;
 import project.gym.model.Member;
 import project.gym.model.Room;
 import project.gym.repo.ActivityRepo;
+import project.gym.repo.MemberRepo;
 import project.gym.repo.RoomRepo;
 
 
@@ -22,14 +23,13 @@ public class ActivityService {
     private ActivityRepo activityRepo;
 
     @Autowired
-    private RoomRepo roomRepo;
+    private MemberRepo memberRepo;
 
     @Autowired
-    private JwtService jwtService;
+    private RoomRepo roomRepo;
 
-    public ActivityResponseDto createActivity(CreateActivityDto request, String token) {
+    public ActivityResponseDto createActivity(CreateActivityDto request, Member trainer) {
         Activity newActivity = request.toActivity();
-        Member trainer = jwtService.getMember(token);
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
 
         newActivity.setRoom(room);
@@ -59,5 +59,16 @@ public class ActivityService {
 
     public void deleteActivity(Long id) {
         activityRepo.deleteById(id);
+    }
+
+    @Transactional
+    public void enrollForActivity(Long id, Member member) {
+        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+
+        activity.getMembers().add(member);
+        member.getActivities().add(activity);
+
+        activityRepo.save(activity);
+        memberRepo.save(member);
     }
 }

@@ -8,8 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponseDto;
 import project.gym.dto.activity.CreateActivityDto;
+import project.gym.model.Member;
 import project.gym.service.ActivityService;
 
 @RestController
@@ -18,12 +20,16 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("/create")
     public ResponseEntity<Object> create(
             @RequestHeader("Authorization") String token,
             @RequestBody @Valid CreateActivityDto requestBody
     ) {
-        ActivityResponseDto newActivity = activityService.createActivity(requestBody, token);
+        Member trainer = jwtService.getMember(token);
+        ActivityResponseDto newActivity = activityService.createActivity(requestBody, trainer);
         return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
     }
 
@@ -47,5 +53,15 @@ public class ActivityController {
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         activityService.deleteActivity(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/enroll")
+    public ResponseEntity<Object> enroll(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String token
+    ) {
+        Member member = jwtService.getMember(token);
+        activityService.enrollForActivity(id, member);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

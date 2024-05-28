@@ -42,6 +42,8 @@ public class SecurityConfig {
                                         "/api/activity/{id}/delete"
                                 )
                                 .hasRole(String.valueOf(Role.TRAINER))
+                                .requestMatchers("/api/activity/{id}/enroll")
+                                .hasRole(String.valueOf(Role.CUSTOMER))
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsImplService)
