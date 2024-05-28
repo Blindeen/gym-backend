@@ -16,7 +16,7 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody @Valid RegisterMemberDto request) {
+    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid RegisterMemberDto request) {
         return ResponseEntity.ok(memberService.register(request));
     }
 
