@@ -42,7 +42,7 @@ public class SecurityConfig {
                                         "/api/activity/{id}/delete"
                                 )
                                 .hasRole(String.valueOf(Role.TRAINER))
-                                .requestMatchers("/api/activity/{id}/enroll")
+                                .requestMatchers("/api/activity/{id}/enroll", "/api/activity/{id}/leave")
                                 .hasRole(String.valueOf(Role.CUSTOMER))
                                 .anyRequest()
                                 .authenticated()
