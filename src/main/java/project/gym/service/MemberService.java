@@ -11,6 +11,7 @@ import project.gym.dto.authentication.AuthenticationResponseDto;
 import project.gym.dto.authentication.LoginMemberDto;
 import project.gym.dto.authentication.RegisterMemberDto;
 import project.gym.exception.EmailAlreadyExistException;
+import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
 import project.gym.model.Member;
 import project.gym.repo.MemberRepo;
@@ -55,7 +56,7 @@ public class MemberService {
                 )
         );
 
-        Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow();
+        Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
         String token = jwtService.generateToken(member);
 
         return new AuthenticationResponseDto(member, token);
