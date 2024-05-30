@@ -39,7 +39,7 @@ public class ActivityController {
             @RequestParam(defaultValue = "5") int pageSize
     ) {
         Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
-        Page<ActivityResponse> activities = activityService.listActivities(pageableRequest);
+        Page<ActivityResponse> activities = activityService.getActivities(pageableRequest);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 

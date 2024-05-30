@@ -45,7 +45,7 @@ public class ActivityService {
         return ActivityResponse.valueOf(newActivity);
     }
 
-    public Page<ActivityResponse> listActivities(Pageable pageable) {
+    public Page<ActivityResponse> getActivities(Pageable pageable) {
         return activityRepo.findAll(pageable).map(ActivityResponse::valueOf);
     }
 
