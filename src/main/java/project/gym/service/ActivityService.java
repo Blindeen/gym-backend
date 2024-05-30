@@ -52,13 +52,11 @@ public class ActivityService {
     public ActivityResponse updateActivity(Long id, CreateActivityRequest request) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
 
-        activity.setName(request.getName() != null ? request.getName() : activity.getName());
-        activity.setDayOfWeek(request.getDayOfWeek() != null ? request.getDayOfWeek() : activity.getDayOfWeek());
-        activity.setStartTime(request.getStartTime() != null ? request.getStartTime() : activity.getStartTime());
-        activity.setEndTime(request.getEndTime() != null ? request.getEndTime() : activity.getEndTime());
-        if (request.getRoomId() != null) {
-            activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
-        }
+        activity.setName(request.getName());
+        activity.setDayOfWeek(request.getDayOfWeek());
+        activity.setStartTime(request.getStartTime());
+        activity.setEndTime(request.getEndTime());
+        activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
 
         activity = activityRepo.save(activity);
         return ActivityResponse.valueOf(activity);

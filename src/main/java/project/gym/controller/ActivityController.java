@@ -46,7 +46,7 @@ public class ActivityController {
     @PutMapping("/{id}/update")
     public ResponseEntity<ActivityResponse> update(
             @PathVariable Long id,
-            @RequestBody CreateActivityRequest requestBody
+            @RequestBody @Valid CreateActivityRequest requestBody
     ) {
         ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
