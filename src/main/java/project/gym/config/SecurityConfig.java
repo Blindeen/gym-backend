@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import project.gym.enums.Role;
 import project.gym.service.UserDetailsImplService;
 
@@ -26,6 +25,8 @@ public class SecurityConfig {
     private final UserDetailsImplService userDetailsImplService;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final static String SWAGGER_WHITELIST = "/swagger-ui/**";
 
     public SecurityConfig(UserDetailsImplService userDetailsImplService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsImplService = userDetailsImplService;
@@ -39,6 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req.requestMatchers(LOGIN, REGISTER)
                                 .permitAll()
+                                .requestMatchers(SWAGGER_WHITELIST)
+                                .permitAll()
                                 .requestMatchers(
                                         CREATE_ACTIVITY,
                                         UPDATE_ACTIVITY,
@@ -48,7 +51,7 @@ public class SecurityConfig {
                                 .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY)
                                 .hasRole(String.valueOf(Role.CUSTOMER))
                                 .anyRequest()
-                                .authenticated()
+                                .permitAll()
                 ).userDetailsService(userDetailsImplService)
                 .exceptionHandling(e -> e.accessDeniedHandler(
                                 (request, response, accessDeniedException) -> response.setStatus(403)
