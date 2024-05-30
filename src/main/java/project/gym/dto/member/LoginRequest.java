@@ -1,10 +1,10 @@
-package project.gym.dto.authentication;
+package project.gym.dto.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class LoginMemberDto {
+public class LoginRequest {
     @NotEmpty(message = "Email is required")
     private String email;
 

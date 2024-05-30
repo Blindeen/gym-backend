@@ -1,5 +1,6 @@
 package project.gym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class Member implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private long id;
 
     @Column(nullable = false)
@@ -33,6 +35,7 @@ public class Member implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
@@ -41,15 +44,18 @@ public class Member implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) default 'CUSTOMER'")
+    @JsonIgnore
     private Role role = Role.CUSTOMER;
 
     @Column(columnDefinition = "boolean default false")
+    @JsonIgnore
     private boolean archived = false;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Contact contact;
 
     @ManyToMany
+    @JsonIgnore
     private Set<Activity> activities;
 
     @ManyToOne
@@ -59,34 +65,41 @@ public class Member implements UserDetails {
     private PaymentMethod paymentMethod;
 
     @OneToMany(mappedBy = "trainer")
+    @JsonIgnore
     private Set<Activity> trainerActivities;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

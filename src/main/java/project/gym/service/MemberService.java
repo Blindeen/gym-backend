@@ -3,14 +3,17 @@ package project.gym.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
-import project.gym.dto.authentication.AuthenticationResponse;
-import project.gym.dto.authentication.LoginMemberDto;
-import project.gym.dto.authentication.RegisterMemberDto;
+import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.LoginRequest;
+import project.gym.dto.member.RegisterRequest;
+import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.exception.EmailAlreadyExistException;
+import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
 import project.gym.model.Member;
 import project.gym.repo.MemberRepo;
@@ -29,7 +32,7 @@ public class MemberService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterMemberDto request) {
+    public AuthenticationResponse register(RegisterRequest request) {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
@@ -44,10 +47,10 @@ public class MemberService {
 
         String token = jwtService.generateToken(newMember);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponse(newMember, token);
     }
 
-    public AuthenticationResponse authentication(LoginMemberDto request) {
+    public AuthenticationResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -55,9 +58,34 @@ public class MemberService {
                 )
         );
 
-        Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow();
+        Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
         String token = jwtService.generateToken(member);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponse(member, token);
+    }
+
+    public Member update(Member member, UpdateMemberRequest request) {
+        member.setFirstName(request.getFirstName());
+        member.setLastName(request.getLastName());
+        member.setEmail(request.getEmail());
+        member.setBirthdate(request.getBirthdate());
+        member.setContact(request.toContact());
+
+        String newPassword = request.getNewPassword();
+        if (newPassword != null) {
+            String currentPassword = request.getPassword();
+            boolean currentMatchesOld = passwordEncoder.matches(currentPassword, member.getPassword());
+            if (!currentMatchesOld) {
+                throw new BadCredentialsException("Incorrect old password");
+            }
+
+            member.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        try {
+            return memberRepo.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new EmailAlreadyExistException();
+        }
     }
 }
