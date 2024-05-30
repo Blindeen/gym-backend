@@ -54,7 +54,7 @@ public class MemberController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @GetMapping("/my-activities")
+    @GetMapping("/activities")
     public ResponseEntity<Page<ActivityResponse>> getMyActivities(
             @RequestHeader("Authorization") String token,
             @RequestParam(defaultValue = "0") int pageNumber,
