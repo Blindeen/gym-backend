@@ -24,7 +24,7 @@ public class ActivityController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> create(
+    public ResponseEntity<ActivityResponse> create(
             @RequestHeader("Authorization") String token,
             @RequestBody @Valid CreateActivityRequest requestBody
     ) {
@@ -34,7 +34,7 @@ public class ActivityController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> list(
+    public ResponseEntity<Page<ActivityResponse>> list(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
@@ -44,19 +44,22 @@ public class ActivityController {
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityRequest requestBody) {
+    public ResponseEntity<ActivityResponse> update(
+            @PathVariable Long id,
+            @RequestBody CreateActivityRequest requestBody
+    ) {
         ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         activityService.deleteActivity(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/{id}/enroll")
-    public ResponseEntity<Object> enroll(
+    public ResponseEntity<Void> enroll(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {
@@ -66,7 +69,7 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}/leave")
-    public ResponseEntity<Object> leave(
+    public ResponseEntity<Void> leave(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {
