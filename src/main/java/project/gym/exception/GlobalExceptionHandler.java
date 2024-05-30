@@ -20,6 +20,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> exception() {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Internal server error");
+
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -55,5 +62,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleException() {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Internal server error");
+
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
