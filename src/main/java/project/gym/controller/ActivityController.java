@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
+import project.gym.dto.activity.UpdateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
 
@@ -46,7 +47,7 @@ public class ActivityController {
     @PutMapping("/{id}/update")
     public ResponseEntity<ActivityResponse> update(
             @PathVariable Long id,
-            @RequestBody @Valid CreateActivityRequest requestBody
+            @RequestBody @Valid UpdateActivityRequest requestBody
     ) {
         ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
