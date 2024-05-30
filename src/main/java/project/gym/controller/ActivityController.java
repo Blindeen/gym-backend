@@ -9,8 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.config.JwtService;
-import project.gym.dto.activity.ActivityResponseDto;
-import project.gym.dto.activity.CreateActivityDto;
+import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activity.CreateActivityRequest;
+import project.gym.dto.activity.UpdateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
 
@@ -24,39 +25,42 @@ public class ActivityController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> create(
+    public ResponseEntity<ActivityResponse> create(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid CreateActivityDto requestBody
+            @RequestBody @Valid CreateActivityRequest requestBody
     ) {
         Member trainer = jwtService.getMember(token);
-        ActivityResponseDto newActivity = activityService.createActivity(requestBody, trainer);
+        ActivityResponse newActivity = activityService.createActivity(requestBody, trainer);
         return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Object> list(
+    public ResponseEntity<Page<ActivityResponse>> list(
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
-        Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
-        Page<ActivityResponseDto> activities = activityService.listActivities(pageableRequest);
+        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Page<ActivityResponse> activities = activityService.getActivities(pagination);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityDto requestBody) {
-        ActivityResponseDto activity = activityService.updateActivity(id, requestBody);
+    public ResponseEntity<ActivityResponse> update(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateActivityRequest requestBody
+    ) {
+        ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         activityService.deleteActivity(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/{id}/enroll")
-    public ResponseEntity<Object> enroll(
+    public ResponseEntity<Void> enroll(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {
@@ -66,7 +70,7 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}/leave")
-    public ResponseEntity<Object> leave(
+    public ResponseEntity<Void> leave(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {

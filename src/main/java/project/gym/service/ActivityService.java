@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.gym.dto.activity.ActivityResponseDto;
-import project.gym.dto.activity.CreateActivityDto;
+import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.exception.ActivityDoesNotExist;
 import project.gym.exception.AlreadyEnrolledException;
 import project.gym.exception.RoomDoesNotExist;
@@ -17,7 +17,6 @@ import project.gym.model.Room;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
 import project.gym.repo.RoomRepo;
-
 
 @Service
 public class ActivityService {
@@ -30,33 +29,37 @@ public class ActivityService {
     @Autowired
     private RoomRepo roomRepo;
 
-    public ActivityResponseDto createActivity(CreateActivityDto request, Member trainer) {
-        Activity newActivity = request.toActivity();
+    @Transactional
+    public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {
+        trainer = memberRepo.findById(trainer.getId()).orElseThrow(UserDoesNotExistException::new);
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
 
+        Activity newActivity = request.toActivity();
         newActivity.setRoom(room);
         newActivity.setTrainer(trainer);
         newActivity = activityRepo.save(newActivity);
-        return ActivityResponseDto.valueOf(newActivity);
+
+        trainer.getTrainerActivities().add(newActivity);
+        memberRepo.save(trainer);
+
+        return ActivityResponse.valueOf(newActivity);
     }
 
-    public Page<ActivityResponseDto> listActivities(Pageable pageable) {
-        return activityRepo.findAll(pageable).map(ActivityResponseDto::valueOf);
+    public Page<ActivityResponse> getActivities(Pageable pagination) {
+        return activityRepo.findAll(pagination).map(ActivityResponse::valueOf);
     }
 
-    public ActivityResponseDto updateActivity(Long id, CreateActivityDto request) {
+    public ActivityResponse updateActivity(Long id, CreateActivityRequest request) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
 
-        activity.setName(request.getName() != null ? request.getName() : activity.getName());
-        activity.setDayOfWeek(request.getDayOfWeek() != null ? request.getDayOfWeek() : activity.getDayOfWeek());
-        activity.setStartTime(request.getStartTime() != null ? request.getStartTime() : activity.getStartTime());
-        activity.setEndTime(request.getEndTime() != null ? request.getEndTime() : activity.getEndTime());
-        if (request.getRoomId() != null) {
-            activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
-        }
+        activity.setName(request.getName());
+        activity.setDayOfWeek(request.getDayOfWeek());
+        activity.setStartTime(request.getStartTime());
+        activity.setEndTime(request.getEndTime());
+        activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
 
         activity = activityRepo.save(activity);
-        return ActivityResponseDto.valueOf(activity);
+        return ActivityResponse.valueOf(activity);
     }
 
     public void deleteActivity(Long id) {
