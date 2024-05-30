@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.config.JwtService;
-import project.gym.dto.activity.ActivityResponseDto;
-import project.gym.dto.activity.CreateActivityDto;
+import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
 
@@ -26,10 +26,10 @@ public class ActivityController {
     @PostMapping("/create")
     public ResponseEntity<Object> create(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid CreateActivityDto requestBody
+            @RequestBody @Valid CreateActivityRequest requestBody
     ) {
         Member trainer = jwtService.getMember(token);
-        ActivityResponseDto newActivity = activityService.createActivity(requestBody, trainer);
+        ActivityResponse newActivity = activityService.createActivity(requestBody, trainer);
         return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
     }
 
@@ -39,13 +39,13 @@ public class ActivityController {
             @RequestParam(defaultValue = "5") int pageSize
     ) {
         Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
-        Page<ActivityResponseDto> activities = activityService.listActivities(pageableRequest);
+        Page<ActivityResponse> activities = activityService.listActivities(pageableRequest);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityDto requestBody) {
-        ActivityResponseDto activity = activityService.updateActivity(id, requestBody);
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody CreateActivityRequest requestBody) {
+        ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
 

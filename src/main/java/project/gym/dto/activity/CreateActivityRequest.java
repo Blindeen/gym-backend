@@ -9,7 +9,7 @@ import project.gym.model.Activity;
 import java.time.LocalTime;
 
 @Data
-public class CreateActivityDto {
+public class CreateActivityRequest {
     @NotEmpty(message = "Activity name is required")
     private String name;
 

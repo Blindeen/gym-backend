@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.gym.dto.activity.ActivityResponseDto;
-import project.gym.dto.activity.CreateActivityDto;
+import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.exception.ActivityDoesNotExist;
 import project.gym.exception.AlreadyEnrolledException;
 import project.gym.exception.RoomDoesNotExist;
@@ -30,21 +30,21 @@ public class ActivityService {
     @Autowired
     private RoomRepo roomRepo;
 
-    public ActivityResponseDto createActivity(CreateActivityDto request, Member trainer) {
+    public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {
         Activity newActivity = request.toActivity();
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
 
         newActivity.setRoom(room);
         newActivity.setTrainer(trainer);
         newActivity = activityRepo.save(newActivity);
-        return ActivityResponseDto.valueOf(newActivity);
+        return ActivityResponse.valueOf(newActivity);
     }
 
-    public Page<ActivityResponseDto> listActivities(Pageable pageable) {
-        return activityRepo.findAll(pageable).map(ActivityResponseDto::valueOf);
+    public Page<ActivityResponse> listActivities(Pageable pageable) {
+        return activityRepo.findAll(pageable).map(ActivityResponse::valueOf);
     }
 
-    public ActivityResponseDto updateActivity(Long id, CreateActivityDto request) {
+    public ActivityResponse updateActivity(Long id, CreateActivityRequest request) {
         Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
 
         activity.setName(request.getName() != null ? request.getName() : activity.getName());
@@ -56,7 +56,7 @@ public class ActivityService {
         }
 
         activity = activityRepo.save(activity);
-        return ActivityResponseDto.valueOf(activity);
+        return ActivityResponse.valueOf(activity);
     }
 
     public void deleteActivity(Long id) {
