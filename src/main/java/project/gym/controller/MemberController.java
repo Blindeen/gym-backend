@@ -2,10 +2,14 @@ package project.gym.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.config.JwtService;
+import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
@@ -47,6 +51,18 @@ public class MemberController {
     ) {
         Member member = jwtService.getMember(token);
         Member responseBody = memberService.update(member, request);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @GetMapping("/activities")
+    public ResponseEntity<Page<ActivityResponse>> getMyActivities(
+            @RequestHeader("Authorization") String token,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "5") int pageSize
+    ) {
+        Member member = jwtService.getMember(token);
+        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Page<ActivityResponse> responseBody = memberService.getMyActivities(member, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }
