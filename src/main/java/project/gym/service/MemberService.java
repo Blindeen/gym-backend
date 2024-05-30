@@ -8,10 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
-import project.gym.dto.authentication.AuthenticationResponseDto;
-import project.gym.dto.authentication.LoginMemberDto;
-import project.gym.dto.authentication.MemberRequestDto;
-import project.gym.dto.authentication.UpdateMemberRequest;
+import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.LoginRequest;
+import project.gym.dto.member.RegisterRequest;
+import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
@@ -32,7 +32,7 @@ public class MemberService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponseDto register(MemberRequestDto request) {
+    public AuthenticationResponse register(RegisterRequest request) {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
@@ -47,10 +47,10 @@ public class MemberService {
 
         String token = jwtService.generateToken(newMember);
 
-        return new AuthenticationResponseDto(newMember, token);
+        return new AuthenticationResponse(newMember, token);
     }
 
-    public AuthenticationResponseDto login(LoginMemberDto request) {
+    public AuthenticationResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -61,7 +61,7 @@ public class MemberService {
         Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
         String token = jwtService.generateToken(member);
 
-        return new AuthenticationResponseDto(member, token);
+        return new AuthenticationResponse(member, token);
     }
 
     public Member update(Member member, UpdateMemberRequest request) {

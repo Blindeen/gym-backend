@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.gym.config.JwtService;
-import project.gym.dto.authentication.AuthenticationResponseDto;
-import project.gym.dto.authentication.LoginMemberDto;
-import project.gym.dto.authentication.MemberRequestDto;
-import project.gym.dto.authentication.UpdateMemberRequest;
+import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.LoginRequest;
+import project.gym.dto.member.RegisterRequest;
+import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
 import project.gym.service.MemberService;
 
@@ -23,14 +23,14 @@ public class MemberController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseDto> register(@RequestBody @Valid MemberRequestDto request) {
-        AuthenticationResponseDto responseBody = memberService.register(request);
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest request) {
+        AuthenticationResponse responseBody = memberService.register(request);
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody @Valid LoginMemberDto request) {
-        AuthenticationResponseDto responseBody = memberService.login(request);
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
+        AuthenticationResponse responseBody = memberService.login(request);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

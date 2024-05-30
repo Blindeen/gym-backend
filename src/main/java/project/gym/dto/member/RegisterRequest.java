@@ -1,4 +1,4 @@
-package project.gym.dto.authentication;
+package project.gym.dto.member;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -8,7 +8,7 @@ import project.gym.model.Member;
 import java.util.Date;
 
 @Data
-public class MemberRequestDto {
+public class RegisterRequest {
     @NotEmpty(message = "First name is required")
     protected String firstName;
 
