@@ -3,6 +3,7 @@ package project.gym.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import project.gym.config.JwtService;
 import project.gym.dto.authentication.AuthenticationResponseDto;
 import project.gym.dto.authentication.LoginMemberDto;
 import project.gym.dto.authentication.MemberRequestDto;
+import project.gym.dto.authentication.UpdateMemberRequest;
 import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
@@ -62,15 +64,21 @@ public class MemberService {
         return new AuthenticationResponseDto(member, token);
     }
 
-    public Member update(Member member, MemberRequestDto request) {
+    public Member update(Member member, UpdateMemberRequest request) {
         member.setFirstName(request.getFirstName());
         member.setLastName(request.getLastName());
         member.setEmail(request.getEmail());
         member.setBirthdate(request.getBirthdate());
         member.setContact(request.toContact());
 
-        String newPassword = request.getPassword();
+        String newPassword = request.getNewPassword();
         if (newPassword != null) {
+            String currentPassword = request.getPassword();
+            boolean currentMatchesOld = passwordEncoder.matches(currentPassword, member.getPassword());
+            if (!currentMatchesOld) {
+                throw new BadCredentialsException("Incorrect old password");
+            }
+
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 

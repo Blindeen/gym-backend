@@ -9,6 +9,7 @@ import project.gym.config.JwtService;
 import project.gym.dto.authentication.AuthenticationResponseDto;
 import project.gym.dto.authentication.LoginMemberDto;
 import project.gym.dto.authentication.MemberRequestDto;
+import project.gym.dto.authentication.UpdateMemberRequest;
 import project.gym.model.Member;
 import project.gym.service.MemberService;
 
@@ -42,7 +43,7 @@ public class MemberController {
     @PutMapping("/update")
     public ResponseEntity<Member> update(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid MemberRequestDto request
+            @RequestBody @Valid UpdateMemberRequest request
     ) {
         Member member = jwtService.getMember(token);
         Member responseBody = memberService.update(member, request);

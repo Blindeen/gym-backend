@@ -10,38 +10,38 @@ import java.util.Date;
 @Data
 public class MemberRequestDto {
     @NotEmpty(message = "First name is required")
-    private String firstName;
+    protected String firstName;
 
     @NotEmpty(message = "Last name is required")
-    private String lastName;
+    protected String lastName;
 
     @NotEmpty(message = "Email is required")
     @Email(message = "Invalid email")
-    private String email;
+    protected String email;
 
     @NotEmpty(message = "Password is required")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
             message = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
     )
-    private String password;
+    protected String password;
 
     @Past(message = "Birthdate must be in the past")
-    private Date birthdate;
+    protected Date birthdate;
 
     @NotEmpty(message = "Address line is required")
-    private String addressLine;
+    protected String addressLine;
 
     @NotEmpty(message = "City is required")
-    private String city;
+    protected String city;
 
     @NotEmpty(message = "Postal code is required")
     @Pattern(regexp = "^\\d{5}([ \\-]\\d{4})?$", message = "Invalid postal code")
-    private String postalCode;
+    protected String postalCode;
 
     @NotEmpty(message = "Phone number is required")
     @Pattern(regexp = "^(\\+\\d{1,3})(\\d{9})$", message = "Invalid phone number")
-    private String phoneNumber;
+    protected String phoneNumber;
 
     public Member toMember() {
         return new Member()
