@@ -6,6 +6,7 @@ import project.gym.model.Member;
 @Data
 public class MemberInfo {
     private String email;
+
     private String role;
 
     public static MemberInfo valueOf(Member member) {
