@@ -38,8 +38,8 @@ public class ActivityController {
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
-        Pageable pageableRequest = PageRequest.of(pageNumber, pageSize);
-        Page<ActivityResponse> activities = activityService.getActivities(pageableRequest);
+        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Page<ActivityResponse> activities = activityService.getActivities(pagination);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 

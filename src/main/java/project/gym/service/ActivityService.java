@@ -45,8 +45,8 @@ public class ActivityService {
         return ActivityResponse.valueOf(newActivity);
     }
 
-    public Page<ActivityResponse> getActivities(Pageable pageable) {
-        return activityRepo.findAll(pageable).map(ActivityResponse::valueOf);
+    public Page<ActivityResponse> getActivities(Pageable pagination) {
+        return activityRepo.findAll(pagination).map(ActivityResponse::valueOf);
     }
 
     public ActivityResponse updateActivity(Long id, CreateActivityRequest request) {
