@@ -54,7 +54,7 @@ public class Member implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     private Contact contact;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "members")
     @JsonIgnore
     private Set<Activity> activities;
 

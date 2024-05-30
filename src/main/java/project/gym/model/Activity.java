@@ -31,7 +31,7 @@ public class Activity {
     @Column(nullable = false)
     private LocalTime endTime;
 
-    @ManyToMany(mappedBy = "activities")
+    @ManyToMany
     private Set<Member> members;
 
     @ManyToOne
