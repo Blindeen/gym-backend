@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import project.gym.config.JwtService;
 import project.gym.dto.authentication.AuthenticationResponseDto;
 import project.gym.dto.authentication.LoginMemberDto;
-import project.gym.dto.authentication.RegisterMemberDto;
+import project.gym.dto.authentication.MemberRequestDto;
 import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
@@ -30,7 +30,7 @@ public class MemberService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponseDto register(RegisterMemberDto request) {
+    public AuthenticationResponseDto register(MemberRequestDto request) {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
@@ -60,5 +60,24 @@ public class MemberService {
         String token = jwtService.generateToken(member);
 
         return new AuthenticationResponseDto(member, token);
+    }
+
+    public Member update(Member member, MemberRequestDto request) {
+        member.setFirstName(request.getFirstName());
+        member.setLastName(request.getLastName());
+        member.setEmail(request.getEmail());
+        member.setBirthdate(request.getBirthdate());
+        member.setContact(request.toContact());
+
+        String newPassword = request.getPassword();
+        if (newPassword != null) {
+            member.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        try {
+            return memberRepo.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new EmailAlreadyExistException();
+        }
     }
 }
