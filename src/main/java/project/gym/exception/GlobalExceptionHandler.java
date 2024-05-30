@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,11 +42,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<Object> handleCustomException(CustomException ex) {
+    @ExceptionHandler({CustomException.class, AuthenticationException.class})
+    public ResponseEntity<Object> handleCustomException(RuntimeException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", ex.getMessage());
 
-        return new ResponseEntity<>(body, ex.getStatus());
+        HttpStatus status;
+        if (ex instanceof CustomException) {
+            status = ((CustomException) ex).getStatus();
+        } else {
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
+        return new ResponseEntity<>(body, status);
     }
 }
