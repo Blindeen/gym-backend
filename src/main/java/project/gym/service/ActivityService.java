@@ -18,7 +18,6 @@ import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
 import project.gym.repo.RoomRepo;
 
-
 @Service
 public class ActivityService {
     @Autowired
@@ -30,13 +29,19 @@ public class ActivityService {
     @Autowired
     private RoomRepo roomRepo;
 
+    @Transactional
     public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {
-        Activity newActivity = request.toActivity();
+        trainer = memberRepo.findById(trainer.getId()).orElseThrow(UserDoesNotExistException::new);
         Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
 
+        Activity newActivity = request.toActivity();
         newActivity.setRoom(room);
         newActivity.setTrainer(trainer);
         newActivity = activityRepo.save(newActivity);
+
+        trainer.getTrainerActivities().add(newActivity);
+        memberRepo.save(trainer);
+
         return ActivityResponse.valueOf(newActivity);
     }
 
