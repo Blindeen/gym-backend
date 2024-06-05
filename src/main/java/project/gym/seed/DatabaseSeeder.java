@@ -48,7 +48,7 @@ public class DatabaseSeeder {
 
         passRepo.save(new Pass().withType(PassType.STUDENT).withMonthlyPrice(50).withLength(12));
         passRepo.save(new Pass().withType(PassType.INDEFINITE).withMonthlyPrice(100).withLength(null));
-        passRepo.save(new Pass().withType(PassType.YEAR).withMonthlyPrice(70).withLength(12));
+        passRepo.save(new Pass().withType(PassType.YEARLY).withMonthlyPrice(70).withLength(12));
     }
 
     private void seedPaymentMethodTable() {
