@@ -46,7 +46,7 @@ public class RegisterRequest {
     protected String phoneNumber;
 
     @NotNull(message = "Payment method type is required")
-    protected PaymentMethodType paymentMethodType;
+    protected PaymentMethodType paymentMethod;
 
     @NotNull(message = "Pass type is required")
     protected PassType passType;
