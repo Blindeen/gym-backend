@@ -22,5 +22,5 @@ public class Pass {
     @Column(nullable = false)
     private float monthlyPrice;
 
-    private int length;
+    private Integer length;
 }
