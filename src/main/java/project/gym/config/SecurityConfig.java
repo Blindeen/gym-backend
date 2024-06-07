@@ -26,8 +26,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final static String SWAGGER_WHITELIST = "/swagger-ui/**";
-
     public SecurityConfig(UserDetailsImplService userDetailsImplService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsImplService = userDetailsImplService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -38,10 +36,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(LOGIN, REGISTER)
-                                .permitAll()
-                                .requestMatchers(SWAGGER_WHITELIST)
-                                .permitAll()
+                        req -> req
                                 .requestMatchers(
                                         CREATE_ACTIVITY,
                                         UPDATE_ACTIVITY,
@@ -50,6 +45,8 @@ public class SecurityConfig {
                                 .hasRole(String.valueOf(Role.TRAINER))
                                 .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY)
                                 .hasRole(String.valueOf(Role.CUSTOMER))
+                                .requestMatchers(MEMBER_INFO, UPDATE_MEMBER, MEMBER_ACTIVITIES)
+                                .authenticated()
                                 .anyRequest()
                                 .permitAll()
                 ).userDetailsService(userDetailsImplService)
