@@ -112,12 +112,14 @@ public class MemberService {
         }
     }
 
-    public Page<ActivityResponse> getMyActivities(Member member, Pageable pagination) {
+    public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
         Role role = member.getRole();
         if (role == Role.TRAINER) {
-            return activityRepo.findByTrainer(member, pagination).map(ActivityResponse::valueOf);
+            return activityRepo.findByTrainerAndNameContains(member, name, pagination)
+                    .map(ActivityResponse::valueOf);
         } else {
-            return activityRepo.findByMembersContains(member, pagination).map(ActivityResponse::valueOf);
+            return activityRepo.findByMembersContainsAndNameContains(member, name, pagination)
+                    .map(ActivityResponse::valueOf);
         }
     }
 }
