@@ -16,5 +16,6 @@ public class PaymentMethod {
     private long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentMethodType type;
 }

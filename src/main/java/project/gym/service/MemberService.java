@@ -20,8 +20,12 @@ import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
 import project.gym.model.Member;
+import project.gym.model.Pass;
+import project.gym.model.PaymentMethod;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
+import project.gym.repo.PassRepo;
+import project.gym.repo.PaymentMethodRepo;
 
 @Service
 public class MemberService {
@@ -30,6 +34,12 @@ public class MemberService {
 
     @Autowired
     private ActivityRepo activityRepo;
+
+    @Autowired
+    private PassRepo passRepo;
+
+    @Autowired
+    private PaymentMethodRepo paymentMethodRepo;
 
     @Autowired
     private JwtService jwtService;
@@ -44,8 +54,13 @@ public class MemberService {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
+        PaymentMethod paymentMethod = paymentMethodRepo.findPaymentMethodByType(request.getPaymentMethod());
+        Pass passType = passRepo.findPassByType(request.getPassType());
+
         newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
         newMember.setContact(newContact);
+        newMember.setPaymentMethod(paymentMethod);
+        newMember.setPass(passType);
 
         try {
             memberRepo.save(newMember);
