@@ -17,6 +17,8 @@ import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
 import project.gym.service.MemberService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -64,6 +66,15 @@ public class MemberController {
         Member member = jwtService.getMember(token);
         Pageable pagination = PageRequest.of(pageNumber, pageSize);
         Page<ActivityResponse> responseBody = memberService.getMyActivities(name, member, pagination);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @GetMapping("/available-activities")
+    public ResponseEntity<List<ActivityResponse>> getAvailableActivities(
+            @RequestHeader("Authorization") String token
+    ) {
+        Member member = jwtService.getMember(token);
+        List<ActivityResponse> responseBody = memberService.getAvailableActivities(member);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }

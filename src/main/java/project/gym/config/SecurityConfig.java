@@ -49,7 +49,7 @@ public class SecurityConfig {
                                         DELETE_ACTIVITY
                                 )
                                 .hasRole(String.valueOf(Role.TRAINER))
-                                .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY)
+                                .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY, MEMBER_AVAILABLE_ACTIVITIES)
                                 .hasRole(String.valueOf(Role.CUSTOMER))
                                 .requestMatchers(MEMBER_INFO, UPDATE_MEMBER, MEMBER_ACTIVITIES)
                                 .authenticated()

@@ -27,6 +27,8 @@ import project.gym.repo.MemberRepo;
 import project.gym.repo.PassRepo;
 import project.gym.repo.PaymentMethodRepo;
 
+import java.util.List;
+
 @Service
 public class MemberService {
     @Autowired
@@ -121,5 +123,10 @@ public class MemberService {
             return activityRepo.findByMembersContainsAndNameContains(member, name, pagination)
                     .map(ActivityResponse::valueOf);
         }
+    }
+
+    public List<ActivityResponse> getAvailableActivities(Member member) {
+        return activityRepo.findByMembersNotContains(member)
+                .stream().map(ActivityResponse::valueOf).toList();
     }
 }

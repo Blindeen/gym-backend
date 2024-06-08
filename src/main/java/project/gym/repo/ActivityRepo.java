@@ -8,6 +8,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import project.gym.model.Activity;
 import project.gym.model.Member;
 
+import java.util.List;
+
 public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndSortingRepository<Activity, Long> {
     @NotNull
     Page<Activity> findAll(@NotNull Pageable pageable);
@@ -15,4 +17,6 @@ public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndS
     Page<Activity> findByMembersContainsAndNameContains(Member member, String name, Pageable pageable);
 
     Page<Activity> findByTrainerAndNameContains(Member trainer, String name, Pageable pageable);
+
+    List<Activity> findByMembersNotContains(Member member);
 }
