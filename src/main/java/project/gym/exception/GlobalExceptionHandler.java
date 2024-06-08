@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
@@ -38,6 +39,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())
                 ));
 
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Map<String, Map<String, List<String>>> body = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
+
+        String message = ex.getName();
+        Class<?> requiredType = ex.getRequiredType();
+        if (requiredType != null) {
+            message += " should be of type " + requiredType.getSimpleName();
+        } else {
+            message += " is invalid";
+        }
+
+        errors.put("invalid argument", List.of(message));
         body.put("errors", errors);
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
