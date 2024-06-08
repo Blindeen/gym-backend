@@ -12,7 +12,7 @@ public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndS
     @NotNull
     Page<Activity> findAll(@NotNull Pageable pageable);
 
-    Page<Activity> findByMembersContains(Member member, Pageable pageable);
+    Page<Activity> findByMembersContainsAndNameContains(Member member, String name, Pageable pageable);
 
-    Page<Activity> findByTrainer(Member trainer, Pageable pageable);
+    Page<Activity> findByTrainerAndNameContains(Member trainer, String name, Pageable pageable);
 }
