@@ -2,7 +2,6 @@ package project.gym.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +10,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.gym.enums.Role;
 import project.gym.service.UserDetailsImplService;
@@ -26,11 +25,16 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final static String SWAGGER_WHITELIST = "/swagger-ui/**";
+    private final AuthenticationEntryPoint authEntryPoint;
 
-    public SecurityConfig(UserDetailsImplService userDetailsImplService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(
+            UserDetailsImplService userDetailsImplService,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            AuthenticationEntryPoint authEntryPoint
+    ) {
         this.userDetailsImplService = userDetailsImplService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -38,10 +42,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(LOGIN, REGISTER)
-                                .permitAll()
-                                .requestMatchers(SWAGGER_WHITELIST)
-                                .permitAll()
+                        req -> req
                                 .requestMatchers(
                                         CREATE_ACTIVITY,
                                         UPDATE_ACTIVITY,
@@ -50,13 +51,15 @@ public class SecurityConfig {
                                 .hasRole(String.valueOf(Role.TRAINER))
                                 .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY)
                                 .hasRole(String.valueOf(Role.CUSTOMER))
+                                .requestMatchers(MEMBER_INFO, UPDATE_MEMBER, MEMBER_ACTIVITIES)
+                                .authenticated()
                                 .anyRequest()
                                 .permitAll()
                 ).userDetailsService(userDetailsImplService)
                 .exceptionHandling(e -> e.accessDeniedHandler(
                                 (request, response, accessDeniedException) -> response.setStatus(403)
                         )
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                        .authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
