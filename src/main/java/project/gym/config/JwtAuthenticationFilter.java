@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +15,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import project.gym.service.UserDetailsImplService;
 
+import java.util.Arrays;
+
+import static project.gym.constant.ApiEndpoints.*;
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Value("${server.servlet.context-path}")
+    private String BASE_PATH;
+
     private final JwtService jwtService;
     private final UserDetailsImplService userDetailsImplService;
     @Qualifier("handlerExceptionResolver")
@@ -68,5 +76,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             resolver.resolveException(request, response, null, e);
         }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String[] ignoredPaths = {
+                BASE_PATH + LOGIN,
+                BASE_PATH + REGISTER,
+                BASE_PATH + LIST_ACTIVITIES,
+        };
+        String path = request.getRequestURI();
+        return Arrays.asList(ignoredPaths).contains(path);
     }
 }
