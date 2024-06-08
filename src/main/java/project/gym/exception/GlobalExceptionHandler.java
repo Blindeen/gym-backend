@@ -85,18 +85,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<Object> handleCustomException(RuntimeException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+    public ResponseEntity<Object> handleCustomException(CustomException ex) {
+        Map<String, Map<String, List<String>>> body = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ex.getResource(), List.of(ex.getMessage()));
+        body.put("errors", errors);
 
-        HttpStatus status;
-        if (ex instanceof CustomException) {
-            status = ((CustomException) ex).getStatus();
-        } else {
-            status = HttpStatus.UNAUTHORIZED;
-        }
-
-        return new ResponseEntity<>(body, status);
+        return new ResponseEntity<>(body, ex.getStatus());
     }
 
     @ExceptionHandler(Exception.class)

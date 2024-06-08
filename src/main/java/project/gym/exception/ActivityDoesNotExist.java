@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class ActivityDoesNotExist extends CustomException {
+    private final String resource = "activity";
     private final String message = "Activity does not exist";
-
     private final HttpStatus status = HttpStatus.NOT_FOUND;
 }
