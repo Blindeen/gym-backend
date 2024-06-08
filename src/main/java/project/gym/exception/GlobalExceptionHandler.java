@@ -1,5 +1,6 @@
 package project.gym.exception;
 
+import io.jsonwebtoken.JwtException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("errors", errors);
 
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<Object> handleJwtException() {
+        Map<String, Map<String, List<String>>> body = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put("token", List.of("Invalid token"));
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CustomException.class)
