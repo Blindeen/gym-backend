@@ -28,14 +28,14 @@ public class MemberController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest request) {
+    @PostMapping("/sign-up")
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest request) {
         AuthenticationResponse responseBody = memberService.register(request);
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
+    @PostMapping("/sign-in")
+    public ResponseEntity<AuthenticationResponse> signIn(@RequestBody @Valid LoginRequest request) {
         AuthenticationResponse responseBody = memberService.login(request);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }

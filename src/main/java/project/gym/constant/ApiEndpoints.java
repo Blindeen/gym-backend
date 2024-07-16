@@ -1,8 +1,8 @@
 package project.gym.constant;
 
 public class ApiEndpoints {
-    public static final String REGISTER = "/member/register";
-    public static final String LOGIN = "/member/login";
+    public static final String SIGN_UP = "/member/sign-up";
+    public static final String SIGN_IN = "/member/sign-in";
     public static final String MEMBER_INFO = "/member";
     public static final String UPDATE_MEMBER = "/member/update";
     public static final String MEMBER_ACTIVITIES = "/member/activities";

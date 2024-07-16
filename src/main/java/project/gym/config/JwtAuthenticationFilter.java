@@ -81,8 +81,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] ignoredPaths = {
-                BASE_PATH + LOGIN,
-                BASE_PATH + REGISTER,
+                BASE_PATH + SIGN_IN,
+                BASE_PATH + SIGN_UP,
                 BASE_PATH + LIST_ACTIVITIES,
         };
         String path = request.getRequestURI();
