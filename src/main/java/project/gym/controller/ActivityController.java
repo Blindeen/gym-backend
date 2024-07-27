@@ -36,10 +36,10 @@ public class ActivityController {
 
     @GetMapping("/list")
     public ResponseEntity<Page<ActivityResponse>> list(
-            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
-        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
         Page<ActivityResponse> activities = activityService.getActivities(pagination);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }

@@ -59,12 +59,12 @@ public class MemberController {
     @GetMapping("/activities")
     public ResponseEntity<Page<ActivityResponse>> getMyActivities(
             @RequestHeader("Authorization") String token,
-            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "") String name
     ) {
         Member member = jwtService.getMember(token);
-        Pageable pagination = PageRequest.of(pageNumber, pageSize);
+        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
         Page<ActivityResponse> responseBody = memberService.getMyActivities(name, member, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
