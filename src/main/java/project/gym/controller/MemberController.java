@@ -15,6 +15,7 @@ import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
+import project.gym.service.MailService;
 import project.gym.service.MemberService;
 
 import java.util.List;
@@ -28,9 +29,17 @@ public class MemberController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private MailService mailService;
+
     @PostMapping("/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest request) {
         AuthenticationResponse responseBody = memberService.register(request);
+
+        String emailTo = responseBody.getUser().getEmail();
+        String firstName = responseBody.getUser().getFirstName();
+        mailService.sendSignUpConfirmation(emailTo, firstName);
+
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 

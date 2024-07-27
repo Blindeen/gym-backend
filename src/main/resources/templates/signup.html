@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title th:remove="all">Sign-up confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: Lato, monospace;
+        }
+
+        #logo {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 700;
+        }
+
+        a.link {
+            border: solid 1px #000;
+            background-color: #000;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            display: block;
+            width: 360px;
+            text-align: center;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Confirm your account</h1>
+<div>Welcome to FitSphere <b th:text="${firstName}">name</b>!</div>
+<p>
+    Your account has been created on our platform. Here is your sign-in information:
+    <br/><br/>
+    Email address: <b th:text="${email}">email</b><br/>
+    <br/>
+    To confirm the validity of your email address, please click on the link below
+</p>
+<p>
+    <a class="link" href="#" th:href="${url}">Confirm my account</a>
+</p>
+<br>
+<p>
+    <span id="logo">FitSphere</span>
+</p>
+<p>
+    Regards, <br/>
+    &emsp; <em>The FitSphere Team</em>
+</p>
+</body>
+</html>
