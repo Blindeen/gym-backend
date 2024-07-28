@@ -18,7 +18,7 @@ import project.gym.service.UserDetailsImplService;
 
 import java.util.Arrays;
 
-import static project.gym.constant.ApiEndpoints.*;
+import static project.gym.constant.Endpoints.*;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

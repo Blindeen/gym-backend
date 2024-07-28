@@ -17,7 +17,7 @@ import project.gym.enums.Role;
 import project.gym.middleware.JwtAuthenticationFilter;
 import project.gym.service.UserDetailsImplService;
 
-import static project.gym.constant.ApiEndpoints.*;
+import static project.gym.constant.Endpoints.*;
 
 @Configuration
 @EnableWebSecurity
