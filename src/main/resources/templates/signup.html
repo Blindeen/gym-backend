@@ -5,48 +5,84 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
         body {
+            margin: 20px;
             font-family: Lato, monospace;
         }
 
-        #logo {
-            font-size: 1.5rem;
-            line-height: 2rem;
-            font-weight: 700;
+        small {
+            color: #808080;
+            font-size: 0.75rem;
         }
 
-        a.link {
-            border: solid 1px #000;
-            background-color: #000;
-            text-decoration: none;
-            color: #fff;
+        #content-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #card {
+            width: fit-content;
+            border-radius: 0.75rem;
+            box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+        }
+
+        #card-header {
+            padding: 25px;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            background-color: #526FFF;
+            color: #FFFFFF;
+            font-size: 1.75rem;
             font-weight: bold;
+            line-height: 2rem;
+        }
+
+        #card-content {
+            padding: 0 20px 15px;
+        }
+
+        .link-button {
             display: block;
             width: 360px;
-            text-align: center;
             padding: 10px 0;
+            border-radius: 0.75rem;
+            background-color: #526FFF;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition: 0.5s;
+        }
+
+        .link-button:hover {
+            background-color: #1942fd;
         }
     </style>
 </head>
 <body>
-<h1>Confirm your account</h1>
-<div>Welcome to FitSphere <b th:text="${firstName}">name</b>!</div>
-<p>
-    Your account has been created on our platform. Here is your sign-in information:
-    <br/><br/>
-    Email address: <b th:text="${email}">email</b><br/>
-    <br/>
-    To confirm the validity of your email address, please click on the link below
-</p>
-<p>
-    <a class="link" href="#" th:href="${url}">Confirm my account</a>
-</p>
-<br>
-<p>
-    <span id="logo">FitSphere</span>
-</p>
-<p>
-    Regards, <br/>
-    &emsp; <em>The FitSphere Team</em>
-</p>
+<div id="content-wrapper">
+    <div id="card">
+        <div id="card-header">FitSphere</div>
+        <div id="card-content">
+            <h2>Confirm your account</h2>
+            <div>Welcome to FitSphere <b th:text="${firstName}">firstName</b>!</div>
+            <p>
+                Your account has been created on our platform. Here is your sign-in information:
+                <br/><br/>
+                Email address: <b th:text="${email}">email</b><br/>
+                <br/>
+                To confirm the validity of your email address, please click on the link below
+            </p>
+            <p>
+                <a class="link-button" href="#" th:href="${url}">Confirm my account</a>
+            </p>
+            <br>
+            <p>
+                Regards, <br/>
+                &emsp; <em>The FitSphere Team</em>
+            </p>
+            <small>This is an automated message, please do not reply.</small>
+        </div>
+    </div>
+</div>
 </body>
 </html>
