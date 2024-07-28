@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -45,6 +46,7 @@ public class MailService {
         emailSender.send(mimeMessage);
     }
 
+    @Async
     public void sendSignUpConfirmation(String emailTo, String firstName) {
         String subject = "Sign-up confirmation";
         String templateName = "signup";
