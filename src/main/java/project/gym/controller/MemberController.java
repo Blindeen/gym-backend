@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
+import project.gym.service.JwtService;
 import project.gym.service.MailService;
 import project.gym.service.MemberService;
 

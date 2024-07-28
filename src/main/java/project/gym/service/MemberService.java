@@ -9,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.LoginRequest;

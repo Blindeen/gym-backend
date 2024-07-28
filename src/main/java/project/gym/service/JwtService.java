@@ -1,4 +1,4 @@
-package project.gym.config;
+package project.gym.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

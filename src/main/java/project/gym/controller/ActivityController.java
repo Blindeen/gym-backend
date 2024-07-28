@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.dto.activity.UpdateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
+import project.gym.service.JwtService;
 
 @RestController
 @RequestMapping("/activity")
