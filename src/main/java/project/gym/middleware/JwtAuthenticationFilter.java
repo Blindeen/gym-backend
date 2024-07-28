@@ -1,4 +1,4 @@
-package project.gym.config;
+package project.gym.middleware;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

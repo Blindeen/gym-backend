@@ -14,6 +14,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.gym.enums.Role;
+import project.gym.middleware.JwtAuthenticationFilter;
 import project.gym.service.UserDetailsImplService;
 
 import static project.gym.constant.ApiEndpoints.*;
