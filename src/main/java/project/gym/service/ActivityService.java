@@ -1,6 +1,5 @@
 package project.gym.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,15 @@ import project.gym.repo.RoomRepo;
 
 @Service
 public class ActivityService {
-    @Autowired
-    private ActivityRepo activityRepo;
+    private final ActivityRepo activityRepo;
+    private final MemberRepo memberRepo;
+    private final RoomRepo roomRepo;
 
-    @Autowired
-    private MemberRepo memberRepo;
-
-    @Autowired
-    private RoomRepo roomRepo;
+    public ActivityService(ActivityRepo activityRepo, MemberRepo memberRepo, RoomRepo roomRepo) {
+        this.activityRepo = activityRepo;
+        this.memberRepo = memberRepo;
+        this.roomRepo = roomRepo;
+    }
 
     @Transactional
     public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {

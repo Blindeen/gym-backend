@@ -1,6 +1,5 @@
 package project.gym.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,26 +29,31 @@ import java.util.List;
 
 @Service
 public class MemberService {
-    @Autowired
-    private MemberRepo memberRepo;
+    private final MemberRepo memberRepo;
+    private final ActivityRepo activityRepo;
+    private final PassRepo passRepo;
+    private final PaymentMethodRepo paymentMethodRepo;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private ActivityRepo activityRepo;
-
-    @Autowired
-    private PassRepo passRepo;
-
-    @Autowired
-    private PaymentMethodRepo paymentMethodRepo;
-
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public MemberService(
+            MemberRepo memberRepo,
+            ActivityRepo activityRepo,
+            PassRepo passRepo,
+            PaymentMethodRepo paymentMethodRepo,
+            JwtService jwtService,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager
+    ) {
+        this.memberRepo = memberRepo;
+        this.activityRepo = activityRepo;
+        this.passRepo = passRepo;
+        this.paymentMethodRepo = paymentMethodRepo;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+    }
 
     public AuthenticationResponse register(RegisterRequest request) {
         Member newMember = request.toMember();

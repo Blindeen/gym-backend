@@ -1,6 +1,5 @@
 package project.gym.seed;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -15,14 +14,15 @@ import project.gym.repo.RoomRepo;
 
 @Component
 public class DatabaseSeeder {
-    @Autowired
-    private RoomRepo roomRepo;
+    private final RoomRepo roomRepo;
+    private final PassRepo passRepo;
+    private final PaymentMethodRepo paymentMethodRepo;
 
-    @Autowired
-    private PassRepo passRepo;
-
-    @Autowired
-    private PaymentMethodRepo paymentMethodRepo;
+    public DatabaseSeeder(RoomRepo roomRepo, PassRepo passRepo, PaymentMethodRepo paymentMethodRepo) {
+        this.roomRepo = roomRepo;
+        this.passRepo = passRepo;
+        this.paymentMethodRepo = paymentMethodRepo;
+    }
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {

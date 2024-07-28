@@ -1,7 +1,6 @@
 package project.gym.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +22,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+    private final JwtService jwtService;
+    private final MailService mailService;
 
-    @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private MailService mailService;
+    public MemberController(MemberService memberService, JwtService jwtService, MailService mailService) {
+        this.memberService = memberService;
+        this.jwtService = jwtService;
+        this.mailService = mailService;
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest request) {

@@ -1,7 +1,6 @@
 package project.gym.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +17,13 @@ import project.gym.service.JwtService;
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
-    @Autowired
-    private ActivityService activityService;
+    private final ActivityService activityService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private JwtService jwtService;
+    public ActivityController(ActivityService activityService, JwtService jwtService) {
+        this.activityService = activityService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ActivityResponse> create(

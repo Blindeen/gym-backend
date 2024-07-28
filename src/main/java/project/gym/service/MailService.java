@@ -2,7 +2,6 @@ package project.gym.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,11 +18,13 @@ public class MailService {
     @Value("${spring.mail.username}")
     private String username;
 
-    @Autowired
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
+    private final TemplateEngine htmlTemplateEngine;
 
-    @Autowired
-    private TemplateEngine htmlTemplateEngine;
+    public MailService(JavaMailSender emailSender, TemplateEngine htmlTemplateEngine) {
+        this.emailSender = emailSender;
+        this.htmlTemplateEngine = htmlTemplateEngine;
+    }
 
     private void sendMail(
             String to,
@@ -48,12 +49,13 @@ public class MailService {
 
     @Async
     public void sendSignUpConfirmation(String emailTo, String firstName) {
-        String subject = "Sign-up confirmation";
-        String templateName = "signup";
-        Map<String, Object> vars = Map.of("email", emailTo, "firstName", firstName);
+        Map<String, Object> vars = Map.of(
+                "email", emailTo,
+                "firstName", firstName
+        );
 
         try {
-            sendMail(emailTo, subject, templateName, vars);
+            sendMail(emailTo, "Sign-up confirmation", "signup", vars);
         } catch (MessagingException e) {
             System.err.println("Failed to send email: " + e.getMessage());
         }

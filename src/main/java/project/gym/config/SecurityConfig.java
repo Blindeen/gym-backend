@@ -22,9 +22,7 @@ import static project.gym.constant.ApiEndpoints.*;
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsImplService userDetailsImplService;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final AuthenticationEntryPoint authEntryPoint;
 
     public SecurityConfig(

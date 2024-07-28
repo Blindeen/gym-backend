@@ -16,7 +16,11 @@ public class DelegatedAuthenticationEntryPoint implements AuthenticationEntryPoi
     private HandlerExceptionResolver resolver;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
+    ) {
         resolver.resolveException(request, response, null, authException);
     }
 }
