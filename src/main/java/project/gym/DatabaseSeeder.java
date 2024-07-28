@@ -1,4 +1,4 @@
-package project.gym.seed;
+package project.gym;
 
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

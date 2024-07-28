@@ -1,4 +1,4 @@
-package project.gym.constant;
+package project.gym;
 
 public class Endpoints {
     public static final String SIGN_UP = "/member/sign-up";
