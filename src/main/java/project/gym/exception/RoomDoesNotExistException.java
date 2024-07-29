@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class RoomDoesNotExistException extends CustomException {
-    private final String resource = "room";
-    private final String message = "Room does not exist";
-    private final HttpStatus status = HttpStatus.NOT_FOUND;
+    public RoomDoesNotExistException() {
+        resource = "room";
+        messageKey = "exception.room.not.exist";
+        status = HttpStatus.NOT_FOUND;
+        initialize();
+    }
 }
