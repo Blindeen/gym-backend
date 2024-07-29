@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 public class UserDoesNotExistException extends CustomException {
     public UserDoesNotExistException() {
         resource = "user";
-        messageKey = "exception.user.not.exist";
         status = HttpStatus.NOT_FOUND;
         initialize();
     }

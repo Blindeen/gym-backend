@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ActivityDoesNotExistException extends CustomException {
     public ActivityDoesNotExistException() {
+        super();
         resource = "activity";
-        messageKey = "exception.activity.not.exist";
         status = HttpStatus.NOT_FOUND;
         initialize();
     }

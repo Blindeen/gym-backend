@@ -15,6 +15,10 @@ public abstract class CustomException extends RuntimeException {
     protected HttpStatus status;
     protected static MessageSource messageSource;
 
+    public CustomException() {
+        messageKey = getClass().getSimpleName() + ".message";
+    }
+
     public static void setMessageSource(MessageSource messageSource) {
         CustomException.messageSource = messageSource;
     }

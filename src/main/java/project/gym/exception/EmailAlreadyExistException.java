@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 public class EmailAlreadyExistException extends CustomException {
     public EmailAlreadyExistException() {
         resource = "email";
-        messageKey = "exception.mail.exist";
         status = HttpStatus.CONFLICT;
         initialize();
     }
