@@ -1,6 +1,6 @@
-package project.gym.constant;
+package project.gym;
 
-public class ApiEndpoints {
+public class Endpoints {
     public static final String SIGN_UP = "/member/sign-up";
     public static final String SIGN_IN = "/member/sign-in";
     public static final String MEMBER_INFO = "/member";

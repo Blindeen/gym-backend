@@ -1,20 +1,20 @@
 package project.gym.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
+import project.gym.service.JwtService;
+import project.gym.service.MailService;
 import project.gym.service.MemberService;
 
 import java.util.List;
@@ -22,15 +22,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-    @Autowired
-    private MemberService memberService;
+    private final MemberService memberService;
+    private final JwtService jwtService;
+    private final MailService mailService;
 
-    @Autowired
-    private JwtService jwtService;
+    public MemberController(MemberService memberService, JwtService jwtService, MailService mailService) {
+        this.memberService = memberService;
+        this.jwtService = jwtService;
+        this.mailService = mailService;
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest request) {
         AuthenticationResponse responseBody = memberService.register(request);
+
+        String emailTo = responseBody.getUser().getEmail();
+        String firstName = responseBody.getUser().getFirstName();
+        mailService.sendSignUpConfirmation(emailTo, firstName);
+
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 

@@ -1,10 +1,9 @@
-package project.gym.config;
+package project.gym.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,11 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String JWT_SECRET;
 
-    @Autowired
-    private MemberRepo memberRepo;
+    private final MemberRepo memberRepo;
+
+    public JwtService(MemberRepo memberRepo) {
+        this.memberRepo = memberRepo;
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

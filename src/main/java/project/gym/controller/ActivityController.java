@@ -1,28 +1,29 @@
 package project.gym.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gym.config.JwtService;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.dto.activity.UpdateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
+import project.gym.service.JwtService;
 
 @RestController
 @RequestMapping("/activity")
 public class ActivityController {
-    @Autowired
-    private ActivityService activityService;
+    private final ActivityService activityService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private JwtService jwtService;
+    public ActivityController(ActivityService activityService, JwtService jwtService) {
+        this.activityService = activityService;
+        this.jwtService = jwtService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ActivityResponse> create(

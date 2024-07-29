@@ -1,15 +1,14 @@
 package project.gym.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
-import project.gym.exception.ActivityDoesNotExist;
+import project.gym.exception.ActivityDoesNotExistException;
 import project.gym.exception.AlreadyEnrolledException;
-import project.gym.exception.RoomDoesNotExist;
+import project.gym.exception.RoomDoesNotExistException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Activity;
 import project.gym.model.Member;
@@ -20,19 +19,20 @@ import project.gym.repo.RoomRepo;
 
 @Service
 public class ActivityService {
-    @Autowired
-    private ActivityRepo activityRepo;
+    private final ActivityRepo activityRepo;
+    private final MemberRepo memberRepo;
+    private final RoomRepo roomRepo;
 
-    @Autowired
-    private MemberRepo memberRepo;
-
-    @Autowired
-    private RoomRepo roomRepo;
+    public ActivityService(ActivityRepo activityRepo, MemberRepo memberRepo, RoomRepo roomRepo) {
+        this.activityRepo = activityRepo;
+        this.memberRepo = memberRepo;
+        this.roomRepo = roomRepo;
+    }
 
     @Transactional
     public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {
         trainer = memberRepo.findById(trainer.getId()).orElseThrow(UserDoesNotExistException::new);
-        Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new);
+        Room room = roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExistException::new);
 
         Activity newActivity = request.toActivity();
         newActivity.setRoom(room);
@@ -50,13 +50,13 @@ public class ActivityService {
     }
 
     public ActivityResponse updateActivity(Long id, CreateActivityRequest request) {
-        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExistException::new);
 
         activity.setName(request.getName());
         activity.setDayOfWeek(request.getDayOfWeek());
         activity.setStartTime(request.getStartTime());
         activity.setEndTime(request.getEndTime());
-        activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExist::new));
+        activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExistException::new));
 
         activity = activityRepo.save(activity);
         return ActivityResponse.valueOf(activity);
@@ -68,7 +68,7 @@ public class ActivityService {
 
     @Transactional
     public void enrollForActivity(Long id, Member member) {
-        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExistException::new);
         member = memberRepo.findById(member.getId()).orElseThrow(UserDoesNotExistException::new);
 
         boolean isAlreadyEnrolled = activity.getMembers().add(member);
@@ -83,7 +83,7 @@ public class ActivityService {
 
     @Transactional
     public void leaveActivity(Long id, Member member) {
-        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExist::new);
+        Activity activity = activityRepo.findById(id).orElseThrow(ActivityDoesNotExistException::new);
         member = memberRepo.findById(member.getId()).orElseThrow(UserDoesNotExistException::new);
 
         activity.getMembers().remove(member);

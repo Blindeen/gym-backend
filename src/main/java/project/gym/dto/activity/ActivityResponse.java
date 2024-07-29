@@ -9,17 +9,11 @@ import java.time.LocalTime;
 @Data
 public class ActivityResponse {
     private Long id;
-
     private String name;
-
     private DayOfWeek dayOfWeek;
-
     private LocalTime startTime;
-
     private LocalTime endTime;
-
     private String room;
-
     private TrainerInfo trainer;
 
     public static ActivityResponse valueOf(Activity activity) {
