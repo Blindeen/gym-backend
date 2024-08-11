@@ -63,24 +63,40 @@
     <div id="card">
         <div id="card-header">FitSphere</div>
         <div id="card-content">
-            <h2>Confirm your account</h2>
-            <div>Welcome to FitSphere <b th:text="${firstName}">firstName</b>!</div>
+            <h2 th:text="#{email.confirmAccount}">Confirm your account</h2>
+            <div>
+                <span th:text="#{email.welcomeMessage}">
+                    Welcome to FitSphere
+                </span>
+                <b th:text="${firstName}">firstName</b>!
+            </div>
             <p>
-                Your account has been created on our platform. Here is your sign-in information:
+                <span th:text="#{email.accountCreated}">
+                    Your account has been created on our platform. Here is your sign-in information:
+                </span>
                 <br/><br/>
-                Email address: <b th:text="${email}">email</b><br/>
-                <br/>
-                To confirm the validity of your email address, please click on the link below
+                <span th:text="#{email.emailAddress}">
+                    Email address:
+                </span>
+                <b th:text="${email}">email</b>
+                <br/><br/>
+                <span th:text="#{email.confirmInfo}">
+                    To confirm the validity of your email address, please click on the link below
+                </span>
             </p>
             <p>
-                <a class="link-button" href="#" th:href="${url}">Confirm my account</a>
+                <a class="link-button" href="#" th:href="${url}" th:text="#{email.confirmButton}">
+                    Confirm my account
+                </a>
             </p>
             <br>
             <p>
-                Regards, <br/>
-                &emsp; <em>The FitSphere Team</em>
+                <span th:text="#{email.regards}">Regards,</span> <br/>
+                &emsp; <em th:text="#{email.team}">The FitSphere Team</em>
             </p>
-            <small>This is an automated message, please do not reply.</small>
+            <small th:text="#{email.automatedMessage}">
+                This is an automated message, please do not reply.
+            </small>
         </div>
     </div>
 </div>

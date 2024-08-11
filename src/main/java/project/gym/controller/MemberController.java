@@ -1,6 +1,7 @@
 package project.gym.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,8 @@ public class MemberController {
 
         String emailTo = responseBody.getUser().getEmail();
         String firstName = responseBody.getUser().getFirstName();
+
+        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         mailService.sendSignUpConfirmation(emailTo, firstName);
 
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
