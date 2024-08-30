@@ -15,6 +15,8 @@ import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.enums.Role;
 import project.gym.exception.EmailAlreadyExistException;
+import project.gym.exception.PassTypeDoesNotExistException;
+import project.gym.exception.PaymentMethodDoesNotExist;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Contact;
 import project.gym.model.Member;
@@ -58,8 +60,9 @@ public class MemberService {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
-        PaymentMethod paymentMethod = paymentMethodRepo.findPaymentMethodByName(request.getPaymentMethod());
-        Pass passType = passRepo.findPassByName(request.getPassType());
+        PaymentMethod paymentMethod = paymentMethodRepo.findById(request.getPaymentMethod())
+                .orElseThrow(PaymentMethodDoesNotExist::new);
+        Pass passType = passRepo.findById(request.getPassType()).orElseThrow(PassTypeDoesNotExistException::new);
 
         newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
         newMember.setContact(newContact);

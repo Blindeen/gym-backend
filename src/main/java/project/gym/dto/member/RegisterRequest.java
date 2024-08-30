@@ -2,8 +2,6 @@ package project.gym.dto.member;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import project.gym.enums.PassType;
-import project.gym.enums.PaymentMethodType;
 import project.gym.model.Contact;
 import project.gym.model.Member;
 
@@ -46,10 +44,10 @@ public class RegisterRequest {
     protected String phoneNumber;
 
     @NotNull(message = "Payment method type is required")
-    protected PaymentMethodType paymentMethod;
+    protected long paymentMethod;
 
     @NotNull(message = "Pass type is required")
-    protected PassType passType;
+    protected long passType;
 
     public Member toMember() {
         return new Member()
