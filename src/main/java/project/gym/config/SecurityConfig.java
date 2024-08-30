@@ -22,56 +22,55 @@ import static project.gym.Endpoints.*;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserDetailsImplService userDetailsImplService;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationEntryPoint authEntryPoint;
+        private final UserDetailsImplService userDetailsImplService;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final AuthenticationEntryPoint authEntryPoint;
 
-    public SecurityConfig(
-            UserDetailsImplService userDetailsImplService,
-            JwtAuthenticationFilter jwtAuthenticationFilter,
-            AuthenticationEntryPoint authEntryPoint
-    ) {
-        this.userDetailsImplService = userDetailsImplService;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.authEntryPoint = authEntryPoint;
-    }
+        public SecurityConfig(
+                        UserDetailsImplService userDetailsImplService,
+                        JwtAuthenticationFilter jwtAuthenticationFilter,
+                        AuthenticationEntryPoint authEntryPoint) {
+                this.userDetailsImplService = userDetailsImplService;
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+                this.authEntryPoint = authEntryPoint;
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        req -> req
-                                .requestMatchers(
-                                        CREATE_ACTIVITY,
-                                        UPDATE_ACTIVITY,
-                                        DELETE_ACTIVITY
-                                )
-                                .hasRole(String.valueOf(Role.TRAINER))
-                                .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY, MEMBER_AVAILABLE_ACTIVITIES)
-                                .hasRole(String.valueOf(Role.CUSTOMER))
-                                .requestMatchers(MEMBER_INFO, UPDATE_MEMBER, MEMBER_ACTIVITIES)
-                                .authenticated()
-                                .anyRequest()
-                                .permitAll()
-                ).userDetailsService(userDetailsImplService)
-                .exceptionHandling(e -> e.accessDeniedHandler(
-                                (request, response, accessDeniedException) -> response.setStatus(403)
-                        )
-                        .authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                return http
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .authorizeHttpRequests(
+                                                req -> req
+                                                                .requestMatchers(
+                                                                                CREATE_ACTIVITY,
+                                                                                UPDATE_ACTIVITY,
+                                                                                DELETE_ACTIVITY)
+                                                                .hasRole(String.valueOf(Role.Trainer))
+                                                                .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY,
+                                                                                MEMBER_AVAILABLE_ACTIVITIES)
+                                                                .hasRole(String.valueOf(Role.Customer))
+                                                                .requestMatchers(MEMBER_INFO, UPDATE_MEMBER,
+                                                                                MEMBER_ACTIVITIES)
+                                                                .authenticated()
+                                                                .anyRequest()
+                                                                .permitAll())
+                                .userDetailsService(userDetailsImplService)
+                                .exceptionHandling(e -> e.accessDeniedHandler(
+                                                (request, response, accessDeniedException) -> response.setStatus(403))
+                                                .authenticationEntryPoint(authEntryPoint))
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                .build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+                return configuration.getAuthenticationManager();
+        }
 }

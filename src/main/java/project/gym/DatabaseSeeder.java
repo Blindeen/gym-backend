@@ -46,9 +46,11 @@ public class DatabaseSeeder {
             return;
         }
 
-        passRepo.save(new Pass().withType(PassType.STUDENT).withMonthlyPrice(50).withLength(12));
-        passRepo.save(new Pass().withType(PassType.INDEFINITE).withMonthlyPrice(100).withLength(null));
-        passRepo.save(new Pass().withType(PassType.YEARLY).withMonthlyPrice(70).withLength(12));
+        passRepo.save(new Pass().withName(PassType.College).withMonthlyPrice(50).withLength(12));
+        passRepo.save(new Pass().withName(PassType.Senior).withMonthlyPrice(45).withLength(12));
+        passRepo.save(new Pass().withName(PassType.Dynamic).withMonthlyPrice(85).withLength(12));
+        passRepo.save(new Pass().withName(PassType.Unlimited).withMonthlyPrice(100).withLength(null));
+        passRepo.save(new Pass().withName(PassType.Yearly).withMonthlyPrice(70).withLength(12));
     }
 
     private void seedPaymentMethodTable() {
@@ -56,9 +58,9 @@ public class DatabaseSeeder {
             return;
         }
 
-        paymentMethodRepo.save(new PaymentMethod().withType(PaymentMethodType.CARD));
-        paymentMethodRepo.save(new PaymentMethod().withType(PaymentMethodType.CASH));
-        paymentMethodRepo.save(new PaymentMethod().withType(PaymentMethodType.PAYPAL));
-        paymentMethodRepo.save(new PaymentMethod().withType(PaymentMethodType.BLIK));
+        paymentMethodRepo.save(new PaymentMethod().withName(PaymentMethodType.Card));
+        paymentMethodRepo.save(new PaymentMethod().withName(PaymentMethodType.Cash));
+        paymentMethodRepo.save(new PaymentMethod().withName(PaymentMethodType.PayPal));
+        paymentMethodRepo.save(new PaymentMethod().withName(PaymentMethodType.Blik));
     }
 }

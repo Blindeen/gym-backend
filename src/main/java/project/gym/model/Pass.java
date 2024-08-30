@@ -17,7 +17,7 @@ public class Pass {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PassType type;
+    private PassType name;
 
     @Column(nullable = false)
     private float monthlyPrice;

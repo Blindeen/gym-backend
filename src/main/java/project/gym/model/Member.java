@@ -45,7 +45,7 @@ public class Member implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) default 'CUSTOMER'")
     @JsonIgnore
-    private Role role = Role.CUSTOMER;
+    private Role role = Role.Customer;
 
     @Column(columnDefinition = "boolean default false")
     @JsonIgnore

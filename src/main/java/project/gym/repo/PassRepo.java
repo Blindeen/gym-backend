@@ -5,5 +5,5 @@ import project.gym.enums.PassType;
 import project.gym.model.Pass;
 
 public interface PassRepo extends CrudRepository<Pass, Long> {
-    Pass findPassByType(PassType type);
+    Pass findPassByName(PassType type);
 }

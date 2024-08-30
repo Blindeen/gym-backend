@@ -1,7 +1,9 @@
 package project.gym.enums;
 
 public enum PassType {
-    STUDENT,
-    INDEFINITE,
-    YEARLY
+    College,
+    Senior,
+    Dynamic,
+    Unlimited,
+    Yearly
 }

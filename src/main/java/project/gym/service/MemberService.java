@@ -44,8 +44,7 @@ public class MemberService {
             PaymentMethodRepo paymentMethodRepo,
             JwtService jwtService,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager
-    ) {
+            AuthenticationManager authenticationManager) {
         this.memberRepo = memberRepo;
         this.activityRepo = activityRepo;
         this.passRepo = passRepo;
@@ -59,8 +58,8 @@ public class MemberService {
         Member newMember = request.toMember();
         Contact newContact = request.toContact();
 
-        PaymentMethod paymentMethod = paymentMethodRepo.findPaymentMethodByType(request.getPaymentMethod());
-        Pass passType = passRepo.findPassByType(request.getPassType());
+        PaymentMethod paymentMethod = paymentMethodRepo.findPaymentMethodByName(request.getPaymentMethod());
+        Pass passType = passRepo.findPassByName(request.getPassType());
 
         newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
         newMember.setContact(newContact);
@@ -82,9 +81,7 @@ public class MemberService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
-                        request.getPassword()
-                )
-        );
+                        request.getPassword()));
 
         Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
         String token = jwtService.generateToken(member);
@@ -119,7 +116,7 @@ public class MemberService {
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
         Role role = member.getRole();
-        if (role == Role.TRAINER) {
+        if (role == Role.Trainer) {
             return activityRepo.findByTrainerAndNameContains(member, name, pagination)
                     .map(ActivityResponse::valueOf);
         } else {
