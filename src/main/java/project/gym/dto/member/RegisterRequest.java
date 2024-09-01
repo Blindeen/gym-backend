@@ -22,7 +22,7 @@ public class RegisterRequest {
     @NotEmpty(message = "Password is required")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+            message = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one digit and one special character"
     )
     protected String password;
 
@@ -36,11 +36,11 @@ public class RegisterRequest {
     protected String city;
 
     @NotEmpty(message = "Postal code is required")
-    @Pattern(regexp = "^\\d{5}([ \\-]\\d{4})?$", message = "Invalid postal code")
+    @Pattern(regexp = "^(\\d{5})|(\\d{5}-\\d{4})|(\\d{2}-\\d{3})$", message = "Invalid postal code")
     protected String postalCode;
 
     @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp = "^(\\+\\d{1,3})(\\d{9})$", message = "Invalid phone number")
+    @Pattern(regexp = "^(\\+\\d{1,4})((\\(\\d{3}\\)\\d{3}\\-\\d{4})|(\\d{9}))$", message = "Invalid phone number")
     protected String phoneNumber;
 
     @NotNull(message = "Payment method type is required")
