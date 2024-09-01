@@ -35,9 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserDetailsImplService userDetailsImplService,
-            @Qualifier("handlerExceptionResolver")
-            HandlerExceptionResolver resolver
-    ) {
+            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.jwtService = jwtService;
         this.userDetailsImplService = userDetailsImplService;
         this.resolver = resolver;
@@ -47,8 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) {
+            @NonNull FilterChain filterChain) {
         Locale locale = LocaleContextHolder.getLocale();
         request.setAttribute("locale", locale);
 
@@ -67,12 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (jwtService.isValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
+                            userDetails, null, userDetails.getAuthorities());
 
                     authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request)
-                    );
+                            new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
@@ -90,6 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 BASE_PATH + SIGN_IN,
                 BASE_PATH + SIGN_UP,
                 BASE_PATH + LIST_ACTIVITIES,
+                BASE_PATH + PREPARE_SIGN_UP_FORM
         };
         String path = request.getRequestURI();
         return Arrays.asList(ignoredPaths).contains(path);

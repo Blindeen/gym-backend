@@ -14,4 +14,6 @@ public class Endpoints {
     public static final String DELETE_ACTIVITY = "/activity/{id}/delete";
     public static final String ENROLL_ACTIVITY = "/activity/{id}/enroll";
     public static final String LEAVE_ACTIVITY = "/activity/{id}/leave";
+
+    public static final String PREPARE_SIGN_UP_FORM = "/form/sign-up/prepare";
 }
