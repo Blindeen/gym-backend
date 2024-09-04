@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="${#locale.language}">
+<head>
+    <title th:remove="all" th:text="#{email.signInConfirmation}">Sign-in confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            margin: 20px;
+            font-family: Lato, monospace;
+        }
+
+        small {
+            color: #808080;
+            font-size: 0.75rem;
+        }
+
+        #content-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        #card {
+            width: fit-content;
+            border-radius: 0.75rem;
+            box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+        }
+
+        #card-header {
+            padding: 25px;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            background-color: #526FFF;
+            color: #FFFFFF;
+            font-size: 1.75rem;
+            font-weight: bold;
+            line-height: 2rem;
+        }
+
+        #card-content {
+            padding: 0 20px 15px;
+        }
+
+        .link-button {
+            display: block;
+            width: 360px;
+            padding: 10px 0;
+            border-radius: 0.75rem;
+            background-color: #526FFF;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition: 0.5s;
+        }
+
+        .link-button:hover {
+            background-color: #1942fd;
+        }
+    </style>
+</head>
+<body>
+<div id="content-wrapper">
+    <div id="card">
+        <div id="card-header">FitSphere</div>
+        <div id="card-content">
+            <h2 th:text="#{email.signInConfirmation}">Sign-in confirmation</h2>
+            <div th:text="#{email.hi}">Hi!</div>
+            <br>
+            <div>
+                <span th:text="#{email.signInInfo}">
+                    We have registered a new login to your FitSphere account
+                </span>
+                <h3 th:text="#{email.details}">Details</h3>
+                <ul>
+                    <li th:text="#{email.browser(${browser})}">Browser: Safari</li>
+                    <li th:text="#{email.dateAndTime(${dateAndTime})}">Date and time: 13.08.2024, 17:42 CEST</li>
+                </ul>
+                <span th:text="#{email.changePasswordRecommendation}">
+                    If it was not you, we recommend changing password
+                </span>
+            </div>
+            <br>
+            <a class="link-button" href="#" th:href="@{http://${#httpServletRequest.getServerName()}:5173/profile}" th:text="#{email.changePasswordButton}">
+                Change password
+            </a>
+            <br>
+            <p>
+                <span th:text="#{email.regards}">Regards,</span> <br/>
+                &emsp; <em th:text="#{email.team}">The FitSphere Team</em>
+            </p>
+            <small th:text="#{email.automatedMessage}">
+                This is an automated message, please do not reply.
+            </small>
+        </div>
+    </div>
+</div>
+</body>
+</html>

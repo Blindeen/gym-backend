@@ -2,6 +2,8 @@ package project.gym.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import project.gym.Utils;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Service
@@ -22,11 +25,17 @@ public class MailService {
     private final JavaMailSender emailSender;
     private final TemplateEngine htmlTemplateEngine;
     private final MessageSource messageSource;
+    private final Utils utils;
 
-    public MailService(JavaMailSender emailSender, TemplateEngine htmlTemplateEngine, MessageSource messageSource) {
+    public MailService(
+            JavaMailSender emailSender,
+            TemplateEngine htmlTemplateEngine,
+            MessageSource messageSource,
+            Utils utils) {
         this.emailSender = emailSender;
         this.htmlTemplateEngine = htmlTemplateEngine;
         this.messageSource = messageSource;
+        this.utils = utils;
     }
 
     private void sendMail(
@@ -60,7 +69,21 @@ public class MailService {
         try {
             sendMail(emailTo, subject, "signup", vars);
         } catch (MessagingException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+            System.err.println("Failed to send sign-up confirmation email: " + e.getMessage());
+        }
+    }
+
+    @Async
+    public void sendSignInConfirmation(String emailTo, String browser, ZonedDateTime dateTime) {
+        Map<String, Object> vars = Map.of(
+                "browser", browser,
+                "dateAndTime", utils.formatDateTime(dateTime) + " UTC");
+        String subject = messageSource.getMessage("email.signInConfirmation", null, LocaleContextHolder.getLocale());
+
+        try {
+            sendMail(emailTo, subject, "signin", vars);
+        } catch (MessagingException e) {
+            System.err.println("Failed to send sign-in confirmation email: " + e.getMessage());
         }
     }
 }
