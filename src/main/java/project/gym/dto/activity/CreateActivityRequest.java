@@ -10,19 +10,19 @@ import java.time.LocalTime;
 
 @Data
 public class CreateActivityRequest {
-    @NotEmpty(message = "Activity name is required")
+    @NotEmpty(message = "{validation.activityNameIsRequired}")
     private String name;
 
-    @NotNull(message = "Day of week is required")
+    @NotNull(message = "{validation.dayOfWeekIsRequired}")
     private DayOfWeek dayOfWeek;
 
-    @NotNull(message = "Start time is required")
+    @NotNull(message = "{validation.startTimeIsRequired}")
     private LocalTime startTime;
 
-    @NotNull(message = "End time is required")
+    @NotNull(message = "{validation.endTimeIsRequired}")
     private LocalTime endTime;
 
-    @NotNull(message = "Room id is required")
+    @NotNull(message = "{validation.roomIdIsRequired}")
     private Long roomId;
 
     public Activity toActivity() {

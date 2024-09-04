@@ -9,44 +9,44 @@ import java.util.Date;
 
 @Data
 public class RegisterRequest {
-    @NotEmpty(message = "First name is required")
+    @NotEmpty(message = "{validation.firstNameIsRequired}")
     protected String firstName;
 
-    @NotEmpty(message = "Last name is required")
+    @NotEmpty(message = "{validation.lastNameIsRequired}")
     protected String lastName;
 
-    @NotEmpty(message = "Email is required")
-    @Email(message = "Invalid email")
+    @NotEmpty(message = "{validation.emailIsRequired}")
+    @Email(message = "{validation.invalidEmail}")
     protected String email;
 
-    @NotEmpty(message = "Password is required")
+    @NotEmpty(message = "{validation.passwordIsRequired}")
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one digit and one special character"
+            message = "{validation.invalidPasswordPattern}"
     )
     protected String password;
 
-    @Past(message = "Birthdate must be in the past")
+    @Past(message = "{validation.birthdateInThePast}")
     protected Date birthdate;
 
-    @NotEmpty(message = "Address line is required")
+    @NotEmpty(message = "{validation.addressLineIsRequired}")
     protected String addressLine;
 
-    @NotEmpty(message = "City is required")
+    @NotEmpty(message = "{validation.cityIsRequired}")
     protected String city;
 
-    @NotEmpty(message = "Postal code is required")
-    @Pattern(regexp = "^(\\d{5})|(\\d{5}-\\d{4})|(\\d{2}-\\d{3})$", message = "Invalid postal code")
+    @NotEmpty(message = "{validation.postalCodeIsRequired}")
+    @Pattern(regexp = "^(\\d{5})|(\\d{5}-\\d{4})|(\\d{2}-\\d{3})$", message = "{validation.invalidPostalCode}")
     protected String postalCode;
 
-    @NotEmpty(message = "Phone number is required")
-    @Pattern(regexp = "^(\\+\\d{1,4})((\\(\\d{3}\\)\\d{3}\\-\\d{4})|(\\d{9}))$", message = "Invalid phone number")
+    @NotEmpty(message = "{validation.phoneNumberIsRequired}")
+    @Pattern(regexp = "^(\\+\\d{1,4})((\\(\\d{3}\\)\\d{3}\\-\\d{4})|(\\d{9}))$", message = "{validation.invalidPhoneNumber}")
     protected String phoneNumber;
 
-    @NotNull(message = "Payment method type is required")
+    @NotNull(message = "{validation.paymentMethodIsRequired}")
     protected long paymentMethod;
 
-    @NotNull(message = "Pass type is required")
+    @NotNull(message = "{validation.passTypeIsRequired}")
     protected long passType;
 
     public Member toMember() {
