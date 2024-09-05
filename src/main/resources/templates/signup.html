@@ -44,12 +44,14 @@
             display: block;
             width: 360px;
             padding: 10px 0;
+            border: none;
             border-radius: 0.75rem;
             background-color: #526FFF;
             color: #fff;
             text-decoration: none;
             text-align: center;
             font-weight: bold;
+            cursor: pointer;
             transition: 0.5s;
         }
 
@@ -85,9 +87,9 @@
                 </span>
             </p>
             <p>
-                <a class="link-button" href="#" th:href="${url}" th:text="#{email.confirmButton}">
+                <button class="link-button" type="button" href="#" th:href="@{http://{serverHostName}:5173/confirm-account?token={token}(serverHostName=${serverHostName}, token=${token})}" th:text="#{email.confirmButton}">
                     Confirm my account
-                </a>
+                </button>
             </p>
             <br>
             <p>

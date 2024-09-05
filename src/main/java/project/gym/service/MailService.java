@@ -59,10 +59,13 @@ public class MailService {
     }
 
     @Async
-    public void sendSignUpConfirmation(String emailTo, String firstName) {
+    public void sendSignUpConfirmation(String emailTo, String firstName, String serverHostName, String token) {
         Map<String, Object> vars = Map.of(
                 "email", emailTo,
-                "firstName", firstName);
+                "firstName", firstName,
+                "serverHostName", serverHostName,
+                "token", token
+                );
         String subject = messageSource.getMessage("email.signUpConfirmation", null,
                 LocaleContextHolder.getLocale());
 
@@ -74,11 +77,12 @@ public class MailService {
     }
 
     @Async
-    public void sendSignInConfirmation(String emailTo, String ipAddress, String browser, ZonedDateTime dateTime) {
+    public void sendSignInConfirmation(String emailTo, String ipAddress, String browser, String serverHostName, ZonedDateTime dateTime) {
         Map<String, Object> vars = Map.of(
                 "ipAddress", ipAddress,
                 "browser", browser,
-                "dateAndTime", utils.formatDateTime(dateTime) + " UTC");
+                "dateAndTime", utils.formatDateTime(dateTime) + " UTC",
+                "serverHostName", serverHostName);
         String subject = messageSource.getMessage("email.signInConfirmation", null, LocaleContextHolder.getLocale());
 
         try {

@@ -63,6 +63,10 @@ public class Utils {
         return clientAddr;
     }
 
+    public String getServerHostName(HttpServletRequest request) {
+        return request.getServerName();
+    }
+
     public ZonedDateTime getUtcDateTime() {
         Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
         ZonedDateTime utcDateTime = instant.atZone(ZoneOffset.UTC);

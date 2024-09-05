@@ -40,14 +40,18 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest requestBody) {
+    public ResponseEntity<AuthenticationResponse> signUp(
+        HttpServletRequest request,
+        @RequestBody @Valid RegisterRequest requestBody) {
         AuthenticationResponse responseBody = memberService.register(requestBody);
 
         String emailTo = responseBody.getUser().getEmail();
         String firstName = responseBody.getUser().getFirstName();
+        String serverHostName = utils.getServerHostName(request);
+        String confirmAccountToken = "";
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignUpConfirmation(emailTo, firstName);
+        mailService.sendSignUpConfirmation(emailTo, firstName, serverHostName, confirmAccountToken);
 
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
@@ -56,17 +60,16 @@ public class MemberController {
     public ResponseEntity<AuthenticationResponse> signIn(
             HttpServletRequest request,
             @RequestBody @Valid LoginRequest requestBody) {
-
-        ZonedDateTime dateTime = utils.getUtcDateTime();
-        
         AuthenticationResponse responseBody = memberService.login(requestBody);
 
         String emailTo = responseBody.getUser().getEmail();
         String clientIpAddress = utils.getClientAddr(request);
         String browser = utils.getBrowser(request);
+        String serverName = utils.getServerHostName(request);
+        ZonedDateTime dateTime = utils.getUtcDateTime();
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignInConfirmation(emailTo, clientIpAddress, browser, dateTime);
+        mailService.sendSignInConfirmation(emailTo, clientIpAddress, browser, serverName, dateTime);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }

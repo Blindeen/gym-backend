@@ -44,12 +44,14 @@
             display: block;
             width: 360px;
             padding: 10px 0;
+            border: none;
             border-radius: 0.75rem;
             background-color: #526FFF;
             color: #fff;
             text-decoration: none;
             text-align: center;
             font-weight: bold;
+            cursor: pointer;
             transition: 0.5s;
         }
 
@@ -81,9 +83,9 @@
                 </span>
             </div>
             <br>
-            <a class="link-button" href="#" th:href="@{http://${#httpServletRequest.getServerName()}:5173/profile}" th:text="#{email.changePasswordButton}">
+            <button class="link-button" type="button" href="#" th:href="@{http://{serverHostName}:5173/profile(serverHostName=${serverHostName})}" th:text="#{email.changePasswordButton}">
                 Change password
-            </a>
+            </button>
             <br>
             <p>
                 <span th:text="#{email.regards}">Regards,</span> <br/>
