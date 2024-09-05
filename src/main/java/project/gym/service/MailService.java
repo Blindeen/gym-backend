@@ -74,8 +74,9 @@ public class MailService {
     }
 
     @Async
-    public void sendSignInConfirmation(String emailTo, String browser, ZonedDateTime dateTime) {
+    public void sendSignInConfirmation(String emailTo, String ipAddress, String browser, ZonedDateTime dateTime) {
         Map<String, Object> vars = Map.of(
+                "ipAddress", ipAddress,
                 "browser", browser,
                 "dateAndTime", utils.formatDateTime(dateTime) + " UTC");
         String subject = messageSource.getMessage("email.signInConfirmation", null, LocaleContextHolder.getLocale());

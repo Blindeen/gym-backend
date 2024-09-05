@@ -72,6 +72,7 @@
                 </span>
                 <h3 th:text="#{email.details}">Details</h3>
                 <ul>
+                    <li th:text="#{email.ipAddress(${ipAddress})}">IP Address: 192.168.0.1</li>
                     <li th:text="#{email.browser(${browser})}">Browser: Safari</li>
                     <li th:text="#{email.dateAndTime(${dateAndTime})}">Date and time: 13.08.2024, 17:42 CEST</li>
                 </ul>

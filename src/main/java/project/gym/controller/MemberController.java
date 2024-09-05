@@ -40,8 +40,8 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest request) {
-        AuthenticationResponse responseBody = memberService.register(request);
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody @Valid RegisterRequest requestBody) {
+        AuthenticationResponse responseBody = memberService.register(requestBody);
 
         String emailTo = responseBody.getUser().getEmail();
         String firstName = responseBody.getUser().getFirstName();
@@ -62,10 +62,11 @@ public class MemberController {
         AuthenticationResponse responseBody = memberService.login(requestBody);
 
         String emailTo = responseBody.getUser().getEmail();
+        String clientIpAddress = utils.getClientAddr(request);
         String browser = utils.getBrowser(request);
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignInConfirmation(emailTo, browser, dateTime);
+        mailService.sendSignInConfirmation(emailTo, clientIpAddress, browser, dateTime);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
@@ -79,9 +80,9 @@ public class MemberController {
     @PutMapping("/update")
     public ResponseEntity<Member> update(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid UpdateMemberRequest request) {
+            @RequestBody @Valid UpdateMemberRequest requestBody) {
         Member member = jwtService.getMember(token);
-        Member responseBody = memberService.update(member, request);
+        Member responseBody = memberService.update(member, requestBody);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

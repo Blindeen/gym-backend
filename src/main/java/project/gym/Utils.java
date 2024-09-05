@@ -20,7 +20,7 @@ public class Utils {
     }
 
     public String getBrowser(HttpServletRequest request) {
-        String browser = messageSource.getMessage("browser.other", null, LocaleContextHolder.getLocale());
+        String browser = messageSource.getMessage("browser.unknown", null, LocaleContextHolder.getLocale());
 
         if (request == null) {
             return browser;
@@ -44,6 +44,23 @@ public class Utils {
         }
 
         return browser;
+    }
+
+    public String getClientAddr(HttpServletRequest request) {
+        String clientAddr = messageSource.getMessage("ipAddress.unknown", null, LocaleContextHolder.getLocale());
+
+        if (request == null) {
+            return clientAddr;
+        }
+
+        String xForwardedForHeader = request.getHeader("X-FORWARDED-FOR");
+        if (xForwardedForHeader == null || "".equals(xForwardedForHeader)) {
+            clientAddr = request.getRemoteAddr();
+        } else {
+            clientAddr = xForwardedForHeader;
+        }
+
+        return clientAddr;
     }
 
     public ZonedDateTime getUtcDateTime() {
