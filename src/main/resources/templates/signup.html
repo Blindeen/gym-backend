@@ -46,8 +46,8 @@
             padding: 10px 0;
             border: none;
             border-radius: 0.75rem;
-            background-color: #526FFF;
-            color: #fff;
+            background-color: #526FFF !important;
+            color: #fff !important;
             text-decoration: none;
             text-align: center;
             font-weight: bold;
@@ -56,7 +56,7 @@
         }
 
         .link-button:hover {
-            background-color: #1942fd;
+            background-color: #1942fd !important;
         }
     </style>
 </head>
@@ -87,9 +87,9 @@
                 </span>
             </p>
             <p>
-                <button class="link-button" type="button" href="#" th:href="@{http://{serverHostName}:5173/confirm-account?token={token}(serverHostName=${serverHostName}, token=${token})}" th:text="#{email.confirmButton}">
+                <a class="link-button" href="#" th:href="@{http://{serverHostName}:5173/confirm-account?token={token}(serverHostName=${serverHostName}, token=${token})}" th:text="#{email.confirmButton}">
                     Confirm my account
-                </button>
+                </a>
             </p>
             <br>
             <p>
