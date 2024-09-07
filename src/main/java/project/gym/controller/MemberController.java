@@ -15,6 +15,7 @@ import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
+import project.gym.dto.member.RegistrationResponse;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
 import project.gym.service.JwtService;
@@ -43,15 +44,16 @@ public class MemberController {
     public ResponseEntity<AuthenticationResponse> signUp(
         HttpServletRequest request,
         @RequestBody @Valid RegisterRequest requestBody) {
-        AuthenticationResponse responseBody = memberService.register(requestBody);
+        RegistrationResponse registrationResponse = memberService.register(requestBody);
+        AuthenticationResponse responseBody = registrationResponse.getAuthenticationResponse();
 
-        String emailTo = responseBody.getUser().getEmail();
+        String email = responseBody.getUser().getEmail();
         String firstName = responseBody.getUser().getFirstName();
         String serverHostName = utils.getServerHostName(request);
-        String confirmAccountToken = "";
+        String confirmAccountToken = registrationResponse.getConfirmAccountToken();
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignUpConfirmation(emailTo, firstName, serverHostName, confirmAccountToken);
+        mailService.sendSignUpConfirmation(email, firstName, serverHostName, confirmAccountToken);
 
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }

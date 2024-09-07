@@ -2,6 +2,8 @@ package project.gym.repo;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface AccountConfirmationRepo extends CrudRepository<AccountConfirmationRepo, Long> {
+import project.gym.model.AccountConfirmation;
+
+public interface AccountConfirmationRepo extends CrudRepository<AccountConfirmation, Long> {
 
 }

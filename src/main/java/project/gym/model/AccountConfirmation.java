@@ -24,7 +24,7 @@ public class AccountConfirmation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    String token = null;
+    String token;
 
     Instant generatedAt = Instant.now();
 

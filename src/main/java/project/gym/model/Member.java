@@ -68,6 +68,10 @@ public class Member implements UserDetails {
     @JsonIgnore
     private Set<Activity> trainerActivities;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private AccountConfirmation accountConfirmation;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
