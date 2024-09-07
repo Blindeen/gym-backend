@@ -69,7 +69,7 @@ public class Utils {
         return request.getServerName();
     }
 
-    public ZonedDateTime getUtcDateTime() {
+    public ZonedDateTime nowUTCDateTime() {
         Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
         ZonedDateTime utcDateTime = instant.atZone(ZoneOffset.UTC);
         return utcDateTime;

@@ -28,7 +28,6 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/member")
 public class MemberController {
@@ -46,8 +45,8 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(
-        HttpServletRequest request,
-        @RequestBody @Valid RegisterRequest requestBody) {
+            HttpServletRequest request,
+            @RequestBody @Valid RegisterRequest requestBody) {
         RegistrationResponse registrationResponse = memberService.register(requestBody);
         AuthenticationResponse responseBody = registrationResponse.getAuthenticationResponse();
 
@@ -72,7 +71,7 @@ public class MemberController {
         String clientIpAddress = utils.getClientAddr(request);
         String browser = utils.getBrowser(request);
         String serverName = utils.getServerHostName(request);
-        ZonedDateTime dateTime = utils.getUtcDateTime();
+        ZonedDateTime dateTime = utils.nowUTCDateTime();
 
         LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
         mailService.sendSignInConfirmation(emailTo, clientIpAddress, browser, serverName, dateTime);
