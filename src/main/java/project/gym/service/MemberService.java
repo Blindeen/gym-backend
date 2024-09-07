@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.RegistrationResponse;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.enums.Role;
+import project.gym.exception.AccountAlreadyConfirmed;
 import project.gym.exception.EmailAlreadyExistException;
+import project.gym.exception.InvalidTokenException;
 import project.gym.exception.PassTypeDoesNotExistException;
 import project.gym.exception.PaymentMethodDoesNotExist;
 import project.gym.exception.UserDoesNotExistException;
@@ -33,6 +36,7 @@ import project.gym.repo.PassRepo;
 import project.gym.repo.PaymentMethodRepo;
 
 import java.util.List;
+import java.time.Instant;
 
 @Service
 public class MemberService {
@@ -90,7 +94,7 @@ public class MemberService {
         } catch (DataIntegrityViolationException e) {
             throw new EmailAlreadyExistException();
         }
-        
+
         accountConfirmation = newMember.getAccountConfirmation().withMember(newMember);
         accountConfirmationRepo.save(accountConfirmation);
 
@@ -109,6 +113,18 @@ public class MemberService {
         String token = jwtService.generateToken(member);
 
         return new AuthenticationResponse(member, token);
+    }
+
+    public void confirmAccount(ConfirmAccountRequest request) {
+        String confirmAccountToken = request.getToken();
+        AccountConfirmation accountConfirmation = accountConfirmationRepo.findByToken(confirmAccountToken)
+                .orElseThrow(InvalidTokenException::new);
+        if (accountConfirmation.isConfirmed()) {
+            throw new AccountAlreadyConfirmed();
+        }
+        accountConfirmation.setConfirmed(true);
+        accountConfirmation.setConfirmedAt(Instant.now());
+        accountConfirmationRepo.save(accountConfirmation);
     }
 
     public Member update(Member member, UpdateMemberRequest request) {

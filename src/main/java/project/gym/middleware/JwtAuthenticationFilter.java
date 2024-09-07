@@ -85,7 +85,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 BASE_PATH + SIGN_IN,
                 BASE_PATH + SIGN_UP,
                 BASE_PATH + LIST_ACTIVITIES,
-                BASE_PATH + PREPARE_SIGN_UP_FORM
+                BASE_PATH + PREPARE_SIGN_UP_FORM,
+                BASE_PATH + CONFIRM_ACCOUNT
         };
         String path = request.getRequestURI();
         return Arrays.asList(ignoredPaths).contains(path);
