@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -76,5 +78,10 @@ public class Utils {
     public String formatDateTime(ZonedDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return dateTime.format(formatter);
+    }
+
+    public String generateUniqueToken() {
+        StringKeyGenerator stringKeyGenerator = KeyGenerators.string();
+        return stringKeyGenerator.generateKey();
     }
 }
