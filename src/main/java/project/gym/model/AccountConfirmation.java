@@ -1,6 +1,7 @@
 package project.gym.model;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,8 @@ import lombok.With;
 @NoArgsConstructor
 @With
 public class AccountConfirmation {
+    private static final int EXPIRY_TIME = 24 * 60;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,6 +32,8 @@ public class AccountConfirmation {
     Instant generatedAt = Instant.now();
 
     Instant confirmedAt = null;
+
+    Instant expiresAt = Instant.now().plus(EXPIRY_TIME, ChronoUnit.MINUTES);
 
     boolean isConfirmed = false;
 

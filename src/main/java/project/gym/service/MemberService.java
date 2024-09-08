@@ -23,6 +23,7 @@ import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.InvalidTokenException;
 import project.gym.exception.PassTypeDoesNotExistException;
 import project.gym.exception.PaymentMethodDoesNotExist;
+import project.gym.exception.TokenExpiredException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.AccountConfirmation;
 import project.gym.model.Contact;
@@ -119,9 +120,15 @@ public class MemberService {
         String confirmAccountToken = request.getToken();
         AccountConfirmation accountConfirmation = accountConfirmationRepo.findByToken(confirmAccountToken)
                 .orElseThrow(InvalidTokenException::new);
-        if (accountConfirmation.isConfirmed()) {
+        
+        boolean isConfirmed = accountConfirmation.isConfirmed();
+        Instant expiresAt = accountConfirmation.getExpiresAt();
+        if (isConfirmed) {
             throw new AccountAlreadyConfirmed();
+        } else if (expiresAt.isBefore(Instant.now())) {
+            throw new TokenExpiredException();
         }
+
         accountConfirmation.setConfirmed(true);
         accountConfirmation.setConfirmedAt(Instant.now());
         accountConfirmationRepo.save(accountConfirmation);
