@@ -72,6 +72,10 @@ public class Member implements UserDetails {
     @JsonIgnore
     private AccountConfirmation accountConfirmation;
 
+    @OneToOne
+    @JsonIgnore
+    private PasswordReset passwordReset;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {

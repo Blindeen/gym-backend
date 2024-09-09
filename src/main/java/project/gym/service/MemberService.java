@@ -16,6 +16,7 @@ import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.RegistrationResponse;
+import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.enums.Role;
 import project.gym.exception.AccountAlreadyConfirmed;
@@ -29,15 +30,18 @@ import project.gym.model.AccountConfirmation;
 import project.gym.model.Contact;
 import project.gym.model.Member;
 import project.gym.model.Pass;
+import project.gym.model.PasswordReset;
 import project.gym.model.PaymentMethod;
 import project.gym.repo.AccountConfirmationRepo;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
 import project.gym.repo.PassRepo;
+import project.gym.repo.PasswordResetRepo;
 import project.gym.repo.PaymentMethodRepo;
 
 import java.util.List;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class MemberService {
@@ -46,6 +50,7 @@ public class MemberService {
     private final PassRepo passRepo;
     private final PaymentMethodRepo paymentMethodRepo;
     private final AccountConfirmationRepo accountConfirmationRepo;
+    private final PasswordResetRepo passwordResetRepo;
 
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -58,6 +63,7 @@ public class MemberService {
             PassRepo passRepo,
             PaymentMethodRepo paymentMethodRepo,
             AccountConfirmationRepo accountConfirmationRepo,
+            PasswordResetRepo passwordResetRepo,
             JwtService jwtService,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
@@ -67,6 +73,7 @@ public class MemberService {
         this.passRepo = passRepo;
         this.paymentMethodRepo = paymentMethodRepo;
         this.accountConfirmationRepo = accountConfirmationRepo;
+        this.passwordResetRepo = passwordResetRepo;
 
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -120,7 +127,7 @@ public class MemberService {
         String confirmAccountToken = request.getToken();
         AccountConfirmation accountConfirmation = accountConfirmationRepo.findByToken(confirmAccountToken)
                 .orElseThrow(InvalidTokenException::new);
-        
+
         boolean isConfirmed = accountConfirmation.isConfirmed();
         Instant expiresAt = accountConfirmation.getExpiresAt();
         if (isConfirmed) {
@@ -132,6 +139,29 @@ public class MemberService {
         accountConfirmation.setConfirmed(true);
         accountConfirmation.setConfirmedAt(Instant.now());
         accountConfirmationRepo.save(accountConfirmation);
+    }
+
+    public PasswordReset resetPassword(ResetPasswordRequest request) {
+        String email = request.getEmail();
+        Member member = memberRepo.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
+
+        PasswordReset passwordReset = member.getPasswordReset();
+        if (passwordReset == null) {
+            passwordReset = new PasswordReset();
+        }
+
+        passwordReset.setToken(utils.generateUniqueToken());
+        passwordReset.setLastAttemptAt(Instant.now());
+        passwordReset.setMember(member);
+        Instant expiresAt = Instant.now().plus(PasswordReset.EXPIRY_TIME, ChronoUnit.MINUTES);
+        passwordReset.setExpiresAt(expiresAt);
+
+        member.setPasswordReset(passwordReset);
+
+        passwordResetRepo.save(passwordReset);
+        memberRepo.save(member);
+
+        return passwordReset;
     }
 
     public Member update(Member member, UpdateMemberRequest request) {

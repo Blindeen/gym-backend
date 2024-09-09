@@ -17,8 +17,10 @@ import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.RegistrationResponse;
+import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.model.Member;
+import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
 import project.gym.service.MailService;
 import project.gym.service.MemberService;
@@ -27,6 +29,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/member")
@@ -82,6 +85,20 @@ public class MemberController {
     @PutMapping("/confirm-account")
     public ResponseEntity<Void> confirmAccount(@RequestBody @Valid ConfirmAccountRequest requestBody) {
         memberService.confirmAccount(requestBody);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(
+            HttpServletRequest request,
+            @RequestBody @Valid ResetPasswordRequest requestBody) {
+        PasswordReset passwordReset = memberService.resetPassword(requestBody);
+
+        String email = requestBody.getEmail();
+        String token = passwordReset.getToken();
+        String serverName = utils.getServerHostName(request);
+        mailService.sendPasswordReset(email, token, serverName);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

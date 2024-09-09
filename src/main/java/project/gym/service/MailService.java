@@ -91,4 +91,16 @@ public class MailService {
             System.err.println("Failed to send sign-in confirmation email: " + e.getMessage());
         }
     }
+
+    @Async
+    public void sendPasswordReset(String emailTo, String resetPasswordToken, String serverHostName) {
+        Map<String, Object> vars = Map.of("serverHostName", serverHostName, "token", resetPasswordToken);
+        String subject = messageSource.getMessage("email.passwordReset", null, LocaleContextHolder.getLocale());
+
+        try {
+            sendMail(emailTo, subject, "passwordreset", vars);
+        } catch (MessagingException e) {
+            System.err.println("Failed to send password reset email: " + e.getMessage());
+        } 
+    }
 }
