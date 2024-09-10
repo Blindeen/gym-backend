@@ -5,8 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
         body {
-            margin: 20px;
-            font-family: Lato, monospace;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
         }
 
         small {
@@ -14,13 +15,12 @@
             font-size: 0.75rem;
         }
 
-        #content-wrapper {
-            display: flex;
-            justify-content: center;
+        #card-wrapper {
+            padding: 5px;
         }
 
         #card {
-            width: 70%;
+            width: 100%;
             border-radius: 0.75rem;
             box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
         }
@@ -41,66 +41,74 @@
         }
 
         .link-button {
-            display: block;
-            width: 360px;
-            padding: 10px 0;
+            display: inline-block;
+            padding: 12px 24px;
             border: none;
             border-radius: 0.75rem;
             background-color: #526FFF !important;
             color: #fff !important;
             text-decoration: none;
             text-align: center;
-            font-weight: bold;
-            cursor: pointer;
             transition: 0.5s;
         }
 
         .link-button:hover {
             background-color: #1942fd !important;
         }
+
+        .spacer {
+            height: 20px;
+        }
     </style>
 </head>
 <body>
-<div id="content-wrapper">
-    <div id="card">
-        <div id="card-header">FitSphere</div>
-        <div id="card-content">
-            <h2 th:text="#{email.confirmAccount}">Confirm your account</h2>
-            <div>
-                <span th:text="#{email.welcomeMessage}">
-                    Welcome to FitSphere
-                </span>
-                <b th:text="${firstName}">firstName</b>!
-            </div>
-            <p>
-                <span th:text="#{email.accountCreated}">
-                    Your account has been created on our platform. Here is your sign-in information:
-                </span>
-                <br/><br/>
-                <span th:text="#{email.emailAddress}">
-                    Email address:
-                </span>
-                <b th:text="${email}">email</b>
-                <br/><br/>
-                <span th:text="#{email.confirmInfo}">
-                    To confirm the validity of your email address, please click on the link below
-                </span>
-            </p>
-            <p>
-                <a class="link-button" href="#" th:href="@{http://{serverHostName}:5173/confirm-account?token={token}(serverHostName=${serverHostName}, token=${token})}" th:text="#{email.confirmButton}">
-                    Confirm my account
-                </a>
-            </p>
-            <br>
-            <p>
-                <span th:text="#{email.regards}">Regards,</span> <br/>
-                &emsp; <em th:text="#{email.team}">The FitSphere Team</em>
-            </p>
-            <small th:text="#{email.automatedMessage}">
-                This is an automated message, please do not reply.
-            </small>
-        </div>
-    </div>
-</div>
+<table cellpading="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td id="card-wrapper">
+                <table id="card" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tbody>
+                        <tr>
+                            <td id="card-header">FitSphere</td>
+                        </tr>
+                        <tr>
+                            <td id="card-content">
+                                <h3 th:text="#{email.confirmAccount}">Confirm your account</h3>
+                                <p th:text="#{email.welcomeMessage}">
+                                    Welcome to FitSphere <b th:text="${firstName}">firstName</b>!
+                                </p>
+                                <p th:text="#{email.accountCreated}">
+                                    Your account has been created on our platform. Here is your sign-in information:
+                                </p>
+                                <ul>
+                                    <li th:text="#{email.emailAddress}">
+                                        Email address:
+                                        <b th:text="${email}">email</b>
+                                    </li>
+                                </ul>
+                                <p th:text="#{email.confirmInfo}">
+                                    To confirm the validity of your email address, please click on the link below
+                                </p>
+                                <div align="center">
+                                    <a class="link-button" href="#" th:href="@{http://{serverHostName}:5173/confirm-account?token={token}(serverHostName=${serverHostName}, token=${token})}" th:text="#{email.confirmButton}">
+                                        Confirm my account
+                                    </a>
+                                </div>
+                                <div class="spacer"></div>
+                                <p>
+                                    <span th:text="#{email.regards}">Regards,</span> <br/>
+                                    &emsp; <em th:text="#{email.team}">The FitSphere Team</em>
+                                </p>
+                                <small th:text="#{email.automatedMessage}">
+                                    This is an automated message, please do not reply.
+                                </small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </body>
 </html>
