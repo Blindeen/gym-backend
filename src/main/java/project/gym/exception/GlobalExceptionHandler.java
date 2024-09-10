@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -70,21 +71,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, Map<String, List<String>>> body = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
 
-        String message;
+        String code;
+        String[] args;
+        Locale locale = LocaleContextHolder.getLocale();
+
         String parameterName = ex.getName();
         Class<?> requiredType = ex.getRequiredType();
         if (requiredType != null) {
-            message = messageSource.getMessage(
-                    "MethodArgumentTypeMismatchException.extended.message",
-                    new String[] { parameterName, requiredType.getSimpleName() },
-                    LocaleContextHolder.getLocale());
+            code = "MethodArgumentTypeMismatchException.extended.message";
+            args = new String[] { parameterName, requiredType.getSimpleName() };
         } else {
-            message = messageSource.getMessage(
-                    "MethodArgumentTypeMismatchException.basic.message",
-                    new String[] { parameterName },
-                    LocaleContextHolder.getLocale());
+            code = "MethodArgumentTypeMismatchException.basic.message";
+            args = new String[] { parameterName };
         }
 
+        String message = messageSource.getMessage(code, args, locale);
         errors.put("invalid argument", List.of(message));
         body.put("errors", errors);
 
