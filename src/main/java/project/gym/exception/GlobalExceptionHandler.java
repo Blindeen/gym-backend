@@ -2,6 +2,8 @@ package project.gym.exception;
 
 import io.jsonwebtoken.JwtException;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,13 +25,18 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
             @NotNull HttpHeaders headers,
             @NotNull HttpStatusCode status,
-            @NotNull WebRequest request
-    ) {
+            @NotNull WebRequest request) {
 
         Map<String, Map<String, List<String>>> body = new HashMap<>();
         Map<String, List<String>> errors = ex.getBindingResult()
@@ -37,8 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .collect(Collectors.groupingBy(
                         FieldError::getField,
-                        Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())
-                ));
+                        Collectors.mapping(FieldError::getDefaultMessage, Collectors.toList())));
 
         body.put("errors", errors);
 
@@ -50,8 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpRequestMethodNotSupportedException ex,
             @NotNull HttpHeaders headers,
             @NotNull HttpStatusCode status,
-            @NotNull WebRequest request
-    ) {
+            @NotNull WebRequest request) {
         Map<String, Map<String, List<String>>> body = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
         errors.put("method", List.of(ex.getMessage()));
@@ -65,12 +70,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, Map<String, List<String>>> body = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
 
-        String message = ex.getName();
+        String message;
+        String parameterName = ex.getName();
         Class<?> requiredType = ex.getRequiredType();
         if (requiredType != null) {
-            message += " should be of type " + requiredType.getSimpleName();
+            message = messageSource.getMessage(
+                    "MethodArgumentTypeMismatchException.extended.message",
+                    new String[] { parameterName, requiredType.getSimpleName() },
+                    LocaleContextHolder.getLocale());
         } else {
-            message += " is invalid";
+            message = messageSource.getMessage(
+                    "MethodArgumentTypeMismatchException.basic.message",
+                    new String[] { parameterName },
+                    LocaleContextHolder.getLocale());
         }
 
         errors.put("invalid argument", List.of(message));
@@ -90,10 +102,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(JwtException.class)
-    public ResponseEntity<Object> handleJwtException() {
+    public ResponseEntity<Object> handleJwtException(JwtException ex) {
         Map<String, Map<String, List<String>>> body = new HashMap<>();
         Map<String, List<String>> errors = new HashMap<>();
-        errors.put("token", List.of("Invalid token"));
+        errors.put("token", List.of(ex.getMessage()));
         body.put("errors", errors);
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
@@ -112,7 +124,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleOtherException() {
         Map<String, Object> body = new HashMap<>();
-        body.put("error", "Internal server error");
+        body.put("error", messageSource.getMessage(
+                "InternalServerException.message",
+                null,
+                LocaleContextHolder.getLocale()));
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
