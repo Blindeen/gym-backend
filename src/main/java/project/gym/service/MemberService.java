@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
@@ -162,6 +163,16 @@ public class MemberService {
         memberRepo.save(member);
 
         return passwordReset;
+    }
+
+    public void changePassword(ChangePasswordRequest request) {
+        String token = request.getToken();
+        PasswordReset passwordReset = passwordResetRepo.findByToken(token).orElseThrow(InvalidTokenException::new);
+        String password = request.getPassword();
+
+        Member member = passwordReset.getMember();
+        member.setPassword(passwordEncoder.encode(password));
+        memberRepo.save(member);
     }
 
     public Member update(Member member, UpdateMemberRequest request) {

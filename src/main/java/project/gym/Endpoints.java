@@ -9,6 +9,7 @@ public class Endpoints {
     public static final String MEMBER_AVAILABLE_ACTIVITIES = "/member/available-activities";
     public static final String CONFIRM_ACCOUNT = "/member/confirm-account";
     public static final String RESET_PASSWORD = "/member/reset-password";
+    public static final String CHANGE_PASSWORD = "/member/change-password";
 
     public static final String CREATE_ACTIVITY = "/activity/create";
     public static final String LIST_ACTIVITIES = "/activity/list";

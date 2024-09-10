@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.LoginRequest;
 import project.gym.dto.member.RegisterRequest;
@@ -30,6 +31,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 @RestController
 @RequestMapping("/member")
@@ -99,6 +101,12 @@ public class MemberController {
         String serverName = utils.getServerHostName(request);
         mailService.sendPasswordReset(email, token, serverName);
 
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordRequest requestBody) {
+        memberService.changePassword(requestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
