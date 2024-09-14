@@ -72,7 +72,7 @@ public class Member implements UserDetails {
     @JsonIgnore
     private AccountConfirmation accountConfirmation;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private PasswordReset passwordReset;
 
