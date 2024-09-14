@@ -75,14 +75,14 @@
                         <tr>
                             <td id="card-content">
                                 <h3 th:text="#{email.confirmAccount}">Confirm your account</h3>
-                                <p th:text="#{email.welcomeMessage}">
+                                <p th:utext="#{email.welcomeMessage(${firstName})}">
                                     Welcome to FitSphere <b th:text="${firstName}">firstName</b>!
                                 </p>
                                 <p th:text="#{email.accountCreated}">
                                     Your account has been created on our platform. Here is your sign-in information:
                                 </p>
                                 <ul>
-                                    <li th:text="#{email.emailAddress}">
+                                    <li th:utext="#{email.emailAddress(${email})}">
                                         Email address:
                                         <b th:text="${email}">email</b>
                                     </li>
