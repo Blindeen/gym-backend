@@ -55,7 +55,7 @@ public class ActivityService {
         activity.setName(request.getName());
         activity.setDayOfWeek(request.getDayOfWeek());
         activity.setStartTime(request.getStartTime());
-        activity.setEndTime(request.getEndTime());
+        activity.setDurationMin(request.getDurationMin());
         activity.setRoom(roomRepo.findById(request.getRoomId()).orElseThrow(RoomDoesNotExistException::new));
 
         activity = activityRepo.save(activity);

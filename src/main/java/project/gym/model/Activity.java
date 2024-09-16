@@ -2,10 +2,10 @@ package project.gym.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import project.gym.enums.DayOfWeek;
 
 import java.time.LocalTime;
 import java.util.Set;
+import java.time.DayOfWeek;
 
 @Entity
 @Getter
@@ -29,7 +29,7 @@ public class Activity {
     private LocalTime startTime;
 
     @Column(nullable = false)
-    private LocalTime endTime;
+    private Short durationMin;
 
     @ManyToMany
     private Set<Member> members;

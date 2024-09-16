@@ -3,10 +3,10 @@ package project.gym.dto.activity;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import project.gym.enums.DayOfWeek;
 import project.gym.model.Activity;
 
 import java.time.LocalTime;
+import java.time.DayOfWeek;
 
 @Data
 public class CreateActivityRequest {
@@ -19,8 +19,8 @@ public class CreateActivityRequest {
     @NotNull(message = "{validation.startTimeIsRequired}")
     private LocalTime startTime;
 
-    @NotNull(message = "{validation.endTimeIsRequired}")
-    private LocalTime endTime;
+    @NotNull(message = "{validation.durationIsRequired}")
+    private Short durationMin;
 
     @NotNull(message = "{validation.roomIdIsRequired}")
     private Long roomId;
@@ -30,6 +30,6 @@ public class CreateActivityRequest {
                 .withName(name)
                 .withDayOfWeek(dayOfWeek)
                 .withStartTime(startTime)
-                .withEndTime(endTime);
+                .withDurationMin(durationMin);
     }
 }
