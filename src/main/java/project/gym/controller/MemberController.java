@@ -12,14 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.member.AuthenticationResponse;
-import project.gym.dto.member.ChangePasswordRequest;
-import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.LoginRequest;
-import project.gym.dto.member.RegisterRequest;
-import project.gym.dto.member.RegistrationResponse;
-import project.gym.dto.member.ResetPasswordRequest;
-import project.gym.dto.member.UpdateMemberRequest;
+import project.gym.dto.member.*;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
@@ -108,12 +101,6 @@ public class MemberController {
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordRequest requestBody) {
         memberService.changePassword(requestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("")
-    public ResponseEntity<Member> getInfo(@RequestHeader("Authorization") String token) {
-        Member responseBody = jwtService.getMember(token);
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @PutMapping("/update")

@@ -8,9 +8,4 @@ import project.gym.model.PaymentMethod;
 public class SignUpFormData {
     private final Iterable<Pass> passes;
     private final Iterable<PaymentMethod> paymentMethods;
-
-    public SignUpFormData(Iterable<Pass> passes, Iterable<PaymentMethod> paymentMethods) {
-        this.passes = passes;
-        this.paymentMethods = paymentMethods;
-    }
 }

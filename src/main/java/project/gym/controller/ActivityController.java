@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.dto.activity.UpdateActivityRequest;
@@ -28,8 +29,7 @@ public class ActivityController {
     @PostMapping("/create")
     public ResponseEntity<ActivityResponse> create(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid CreateActivityRequest requestBody
-    ) {
+            @RequestBody @Valid CreateActivityRequest requestBody) {
         Member trainer = jwtService.getMember(token);
         ActivityResponse newActivity = activityService.createActivity(requestBody, trainer);
         return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
@@ -38,8 +38,7 @@ public class ActivityController {
     @GetMapping("/list")
     public ResponseEntity<Page<ActivityResponse>> list(
             @RequestParam(defaultValue = "1") int pageNumber,
-            @RequestParam(defaultValue = "5") int pageSize
-    ) {
+            @RequestParam(defaultValue = "5") int pageSize) {
         Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
         Page<ActivityResponse> activities = activityService.getActivities(pagination);
         return new ResponseEntity<>(activities, HttpStatus.OK);
@@ -48,8 +47,7 @@ public class ActivityController {
     @PutMapping("/{id}/update")
     public ResponseEntity<ActivityResponse> update(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateActivityRequest requestBody
-    ) {
+            @RequestBody @Valid UpdateActivityRequest requestBody) {
         ActivityResponse activity = activityService.updateActivity(id, requestBody);
         return new ResponseEntity<>(activity, HttpStatus.OK);
     }
@@ -63,8 +61,7 @@ public class ActivityController {
     @PostMapping("/{id}/enroll")
     public ResponseEntity<Void> enroll(
             @PathVariable Long id,
-            @RequestHeader("Authorization") String token
-    ) {
+            @RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
         activityService.enrollForActivity(id, member);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -73,8 +70,7 @@ public class ActivityController {
     @DeleteMapping("/{id}/leave")
     public ResponseEntity<Void> leave(
             @PathVariable Long id,
-            @RequestHeader("Authorization") String token
-    ) {
+            @RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
         activityService.leaveActivity(id, member);
         return new ResponseEntity<>(HttpStatus.OK);
