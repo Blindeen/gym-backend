@@ -50,7 +50,8 @@ public class SecurityConfig {
                                                                                 MEMBER_AVAILABLE_ACTIVITIES)
                                                                 .hasRole(String.valueOf(Role.Customer))
                                                                 .requestMatchers(MEMBER_INFO, UPDATE_MEMBER,
-                                                                                MEMBER_ACTIVITIES)
+                                                                                MEMBER_ACTIVITIES,
+                                                                                PREPARE_EDIT_PROFILE_FORM)
                                                                 .authenticated()
                                                                 .anyRequest()
                                                                 .permitAll())

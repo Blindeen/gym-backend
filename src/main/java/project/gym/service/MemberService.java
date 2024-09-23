@@ -178,7 +178,6 @@ public class MemberService {
     public Member update(Member member, UpdateMemberRequest request) {
         member.setFirstName(request.getFirstName());
         member.setLastName(request.getLastName());
-        member.setEmail(request.getEmail());
         member.setBirthdate(request.getBirthdate());
         member.setContact(request.toContact());
 
@@ -193,11 +192,7 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 
-        try {
-            return memberRepo.save(member);
-        } catch (DataIntegrityViolationException e) {
-            throw new EmailAlreadyExistException();
-        }
+        return memberRepo.save(member);
     }
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {

@@ -19,4 +19,5 @@ public class Endpoints {
     public static final String LEAVE_ACTIVITY = "/activity/{id}/leave";
 
     public static final String PREPARE_SIGN_UP_FORM = "/form/sign-up/prepare";
+    public static final String PREPARE_EDIT_PROFILE_FORM = "/form/edit-profile/prepare";
 }
