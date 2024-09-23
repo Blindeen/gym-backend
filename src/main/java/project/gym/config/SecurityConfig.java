@@ -45,10 +45,10 @@ public class SecurityConfig {
                                                                                 CREATE_ACTIVITY,
                                                                                 UPDATE_ACTIVITY,
                                                                                 DELETE_ACTIVITY)
-                                                                .hasRole(String.valueOf(Role.Trainer))
+                                                                .hasRole(String.valueOf(Role.TRAINER))
                                                                 .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY,
                                                                                 MEMBER_AVAILABLE_ACTIVITIES)
-                                                                .hasRole(String.valueOf(Role.Customer))
+                                                                .hasRole(String.valueOf(Role.CUSTOMER))
                                                                 .requestMatchers(MEMBER_INFO, UPDATE_MEMBER,
                                                                                 MEMBER_ACTIVITIES,
                                                                                 PREPARE_EDIT_PROFILE_FORM)

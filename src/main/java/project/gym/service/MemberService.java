@@ -197,7 +197,7 @@ public class MemberService {
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
         Role role = member.getRole();
-        if (role == Role.Trainer) {
+        if (role == Role.TRAINER) {
             return activityRepo.findByTrainerAndNameContains(member, name, pagination)
                     .map(ActivityResponse::valueOf);
         } else {

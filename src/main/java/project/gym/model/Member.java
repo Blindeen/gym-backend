@@ -46,11 +46,9 @@ public class Member implements UserDetails {
     private Date birthdate;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) default 'CUSTOMER'")
     @JsonIgnore
-    private Role role = Role.Customer;
+    private Role role = Role.CUSTOMER;
 
-    @Column(columnDefinition = "boolean default false")
     @JsonIgnore
     private boolean archived = false;
 
@@ -127,12 +125,12 @@ public class Member implements UserDetails {
         return false;
     }
 
-    @JsonProperty("paymentMethodID")
+    @JsonProperty("paymentMethod")
     public Long getPaymentMethodID() {
         return paymentMethod.getId();
     }
 
-    @JsonProperty("passTypeID")
+    @JsonProperty("passType")
     public Long getPassID() {
         return pass.getId();
     }
