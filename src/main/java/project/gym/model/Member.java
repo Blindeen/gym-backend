@@ -1,6 +1,9 @@
 package project.gym.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,6 +55,7 @@ public class Member implements UserDetails {
     private boolean archived = false;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonUnwrapped
     private Contact contact;
 
     @ManyToMany(mappedBy = "members")
@@ -59,9 +63,11 @@ public class Member implements UserDetails {
     private Set<Activity> activities;
 
     @ManyToOne
+    @JsonIgnore
     private Pass pass;
 
     @ManyToOne
+    @JsonIgnore
     private PaymentMethod paymentMethod;
 
     @OneToMany(mappedBy = "trainer")
@@ -119,5 +125,15 @@ public class Member implements UserDetails {
         }
 
         return false;
+    }
+
+    @JsonProperty("paymentMethodID")
+    public Long getPaymentMethodID() {
+        return paymentMethod.getId();
+    }
+
+    @JsonProperty("passTypeID")
+    public Long getPassID() {
+        return pass.getId();
     }
 }
