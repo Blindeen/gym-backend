@@ -178,11 +178,10 @@ public class MemberService {
     public Member update(Member member, UpdateMemberRequest request) {
         member.setFirstName(request.getFirstName());
         member.setLastName(request.getLastName());
-        member.setBirthdate(request.getBirthdate());
         member.setContact(request.toContact());
 
         String newPassword = request.getNewPassword();
-        if (!"".equals(newPassword)) {
+        if (newPassword != null && !"".equals(newPassword)) {
             String currentPassword = request.getPassword();
             boolean currentMatchesOld = passwordEncoder.matches(currentPassword, member.getPassword());
             if (!currentMatchesOld) {

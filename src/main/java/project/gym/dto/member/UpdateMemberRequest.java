@@ -1,10 +1,7 @@
 package project.gym.dto.member;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import project.gym.model.Contact;
@@ -26,9 +23,6 @@ public class UpdateMemberRequest {
 
     @Pattern(regexp = "^()|(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "{validation.invalidPasswordPattern}")
     private String newPassword;
-
-    @Past(message = "{validation.birthdateInThePast}")
-    private LocalDate birthdate;
 
     @NotEmpty(message = "{validation.addressLineIsRequired}")
     private String addressLine;
