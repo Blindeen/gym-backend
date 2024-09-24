@@ -182,7 +182,7 @@ public class MemberService {
         member.setContact(request.toContact());
 
         String newPassword = request.getNewPassword();
-        if (newPassword != null) {
+        if (!"".equals(newPassword)) {
             String currentPassword = request.getPassword();
             boolean currentMatchesOld = passwordEncoder.matches(currentPassword, member.getPassword());
             if (!currentMatchesOld) {

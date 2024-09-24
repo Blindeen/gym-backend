@@ -1,7 +1,6 @@
 package project.gym.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import jakarta.persistence.*;
@@ -11,8 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import project.gym.enums.Role;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -42,8 +41,7 @@ public class Member implements UserDetails {
     private String password;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date birthdate;
+    private LocalDate birthdate;
 
     @Enumerated(EnumType.STRING)
     @JsonIgnore
@@ -123,15 +121,5 @@ public class Member implements UserDetails {
         }
 
         return false;
-    }
-
-    @JsonProperty("paymentMethod")
-    public Long getPaymentMethodID() {
-        return paymentMethod.getId();
-    }
-
-    @JsonProperty("passType")
-    public Long getPassID() {
-        return pass.getId();
     }
 }

@@ -34,7 +34,6 @@ public class FormController {
     @GetMapping("/edit-profile/prepare")
     public EditProfileFormData prepareEditProfileForme(@RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
-        return new EditProfileFormData(member, passRepo.findAll(), paymentMethodRepo.findAll());
+        return new EditProfileFormData(member);
     }
-
 }
