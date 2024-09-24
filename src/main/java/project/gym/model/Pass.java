@@ -1,5 +1,8 @@
 package project.gym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.*;
 import project.gym.enums.PassType;
@@ -17,10 +20,16 @@ public class Pass {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PassType name;
+    @JsonIgnore
+    private PassType type;
 
     @Column(nullable = false)
     private float monthlyPrice;
 
     private Integer length;
+
+    @JsonProperty("name")
+    public String getName() {
+        return type.toString();
+    }
 }

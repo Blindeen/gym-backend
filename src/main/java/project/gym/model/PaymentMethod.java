@@ -1,5 +1,8 @@
 package project.gym.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.*;
 import project.gym.enums.PaymentMethodType;
@@ -17,5 +20,11 @@ public class PaymentMethod {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PaymentMethodType name;
+    @JsonIgnore
+    private PaymentMethodType type;
+
+    @JsonProperty("name")
+    public String getName() {
+        return type.toString();
+    }
 }
