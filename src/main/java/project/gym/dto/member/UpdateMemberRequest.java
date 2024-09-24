@@ -14,17 +14,13 @@ public class UpdateMemberRequest {
     @NotEmpty(message = "{validation.lastNameIsRequired}")
     private String lastName;
 
-    @NotEmpty(message = "{validation.emailIsRequired}")
-    @Email(message = "{validation.invalidEmail}")
-    private String email;
-
     @Pattern(regexp = "^()|(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "{validation.invalidPasswordPattern}")
     private String password;
 
     @Pattern(regexp = "^()|(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "{validation.invalidPasswordPattern}")
     private String newPassword;
 
-    @NotEmpty(message = "{validation.addressLineIsRequired}")
+    @NotEmpty(message = "{validation.addresgsLineIsRequired}")
     private String addressLine;
 
     @NotEmpty(message = "{validation.cityIsRequired}")
