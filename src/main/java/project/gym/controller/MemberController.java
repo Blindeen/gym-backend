@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,8 @@ import project.gym.service.MemberService;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/member")
@@ -103,10 +102,11 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/update")
+    @PutMapping(path = "/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Member> update(
             @RequestHeader("Authorization") String token,
-            @RequestBody @Valid UpdateMemberRequest requestBody) {
+            @RequestPart(required = false) MultipartFile profilePicture,
+            @RequestPart @Valid UpdateMemberRequest requestBody) {
         Member member = jwtService.getMember(token);
         Member responseBody = memberService.update(member, requestBody);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
