@@ -54,6 +54,9 @@ public class Member implements UserDetails {
     @JsonUnwrapped
     private Contact contact;
 
+    @OneToOne
+    private Image profilePicture;
+
     @ManyToMany(mappedBy = "members")
     @JsonIgnore
     private Set<Activity> activities;
