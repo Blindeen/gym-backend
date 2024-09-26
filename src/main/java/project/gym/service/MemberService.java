@@ -29,6 +29,7 @@ import project.gym.exception.TokenExpiredException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.AccountConfirmation;
 import project.gym.model.Contact;
+import project.gym.model.Image;
 import project.gym.model.Member;
 import project.gym.model.Pass;
 import project.gym.model.PasswordReset;
@@ -41,8 +42,11 @@ import project.gym.repo.PasswordResetRepo;
 import project.gym.repo.PaymentMethodRepo;
 
 import java.util.List;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class MemberService {
@@ -175,7 +179,7 @@ public class MemberService {
         memberRepo.save(member);
     }
 
-    public Member update(Member member, UpdateMemberRequest request) {
+    public Member update(Member member, UpdateMemberRequest request, MultipartFile profilePicture) {
         member.setFirstName(request.getFirstName());
         member.setLastName(request.getLastName());
         member.setContact(request.toContact());
@@ -191,7 +195,25 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 
+        createUpdateProfilePicture(member, profilePicture);
+
         return memberRepo.save(member);
+    }
+
+    private void createUpdateProfilePicture(Member member, MultipartFile profilePicture) {
+        Image profilePictureImage = member.getProfilePicture();
+        if (profilePictureImage == null) {
+            profilePictureImage = Image.valueOf(profilePicture);
+        } else {
+            profilePictureImage.setName(profilePicture.getOriginalFilename());
+            profilePictureImage.setType(profilePicture.getContentType());
+            try {
+                profilePictureImage.setData(profilePicture.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        member.setProfilePicture(profilePictureImage);
     }
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {

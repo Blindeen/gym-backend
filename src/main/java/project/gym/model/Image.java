@@ -1,5 +1,7 @@
 package project.gym.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,4 +24,17 @@ public class Image {
     private String type;
 
     private byte[] data;
+
+    public static Image valueOf(MultipartFile file) {
+        Image image = new Image();
+        image.setName(file.getOriginalFilename());
+        image.setType(file.getContentType());
+        try {
+            image.setData(file.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return image;
+    }
 }

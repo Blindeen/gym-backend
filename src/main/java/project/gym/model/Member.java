@@ -54,7 +54,7 @@ public class Member implements UserDetails {
     @JsonUnwrapped
     private Contact contact;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Image profilePicture;
 
     @ManyToMany(mappedBy = "members")

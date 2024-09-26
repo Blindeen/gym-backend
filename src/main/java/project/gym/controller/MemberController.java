@@ -105,10 +105,10 @@ public class MemberController {
     @PutMapping(path = "/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Member> update(
             @RequestHeader("Authorization") String token,
-            @RequestPart(required = false) MultipartFile profilePicture,
+            @RequestPart MultipartFile profilePicture,
             @RequestPart @Valid UpdateMemberRequest requestBody) {
         Member member = jwtService.getMember(token);
-        Member responseBody = memberService.update(member, requestBody);
+        Member responseBody = memberService.update(member, requestBody, profilePicture);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
