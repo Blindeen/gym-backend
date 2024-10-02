@@ -195,7 +195,9 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 
-        createUpdateProfilePicture(member, profilePicture);
+        if (profilePicture != null) {
+            createUpdateProfilePicture(member, profilePicture);
+        }
 
         return memberRepo.save(member);
     }
