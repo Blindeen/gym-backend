@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import project.gym.dto.form.EditProfileFormData;
 import project.gym.dto.form.SignUpFormData;
 import project.gym.model.Member;
-import project.gym.repo.PassRepo;
+import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PaymentMethodRepo;
 import project.gym.service.JwtService;
 
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RestController
 @RequestMapping("/form")
 public class FormController {
-    private final PassRepo passRepo;
+    private final PassTypeRepo passTypeRepo;
     private final PaymentMethodRepo paymentMethodRepo;
     private final JwtService jwtService;
 
-    public FormController(PassRepo passRepo, PaymentMethodRepo paymentMethodRepo, JwtService jwtService) {
-        this.passRepo = passRepo;
+    public FormController(PassTypeRepo passTypeRepo, PaymentMethodRepo paymentMethodRepo, JwtService jwtService) {
+        this.passTypeRepo = passTypeRepo;
         this.paymentMethodRepo = paymentMethodRepo;
         this.jwtService = jwtService;
     }
 
     @GetMapping("/sign-up/prepare")
     public SignUpFormData prepareSignUpForm() {
-        return new SignUpFormData(passRepo.findAll(), paymentMethodRepo.findAll());
+        return new SignUpFormData(passTypeRepo.findAll(), paymentMethodRepo.findAll());
     }
 
     @GetMapping("/edit-profile/prepare")

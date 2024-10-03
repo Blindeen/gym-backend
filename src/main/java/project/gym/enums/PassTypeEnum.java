@@ -2,7 +2,7 @@ package project.gym.enums;
 
 import org.apache.commons.lang3.StringUtils;
 
-public enum PassType {
+public enum PassTypeEnum {
     COLLEGE,
     SENIOR,
     DYNAMIC,

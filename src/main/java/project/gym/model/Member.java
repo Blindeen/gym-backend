@@ -61,7 +61,7 @@ public class Member implements UserDetails {
     @JsonIgnore
     private Set<Activity> activities;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private Pass pass;
 

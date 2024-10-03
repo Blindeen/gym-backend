@@ -3,24 +3,24 @@ package project.gym;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import project.gym.enums.PassType;
+import project.gym.enums.PassTypeEnum;
 import project.gym.enums.PaymentMethodType;
-import project.gym.model.Pass;
 import project.gym.model.PaymentMethod;
 import project.gym.model.Room;
-import project.gym.repo.PassRepo;
+import project.gym.model.PassType;
+import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PaymentMethodRepo;
 import project.gym.repo.RoomRepo;
 
 @Component
 public class DatabaseSeeder {
     private final RoomRepo roomRepo;
-    private final PassRepo passRepo;
+    private final PassTypeRepo passTypeRepo;
     private final PaymentMethodRepo paymentMethodRepo;
 
-    public DatabaseSeeder(RoomRepo roomRepo, PassRepo passRepo, PaymentMethodRepo paymentMethodRepo) {
+    public DatabaseSeeder(RoomRepo roomRepo, PassTypeRepo passTypeRepo, PaymentMethodRepo paymentMethodRepo) {
         this.roomRepo = roomRepo;
-        this.passRepo = passRepo;
+        this.passTypeRepo = passTypeRepo;
         this.paymentMethodRepo = paymentMethodRepo;
     }
 
@@ -42,15 +42,15 @@ public class DatabaseSeeder {
     }
 
     private void seedPassTable() {
-        if (passRepo.count() != 0) {
+        if (passTypeRepo.count() != 0) {
             return;
         }
 
-        passRepo.save(new Pass().withType(PassType.COLLEGE).withMonthlyPrice(50).withLength(12));
-        passRepo.save(new Pass().withType(PassType.SENIOR).withMonthlyPrice(45).withLength(12));
-        passRepo.save(new Pass().withType(PassType.DYNAMIC).withMonthlyPrice(85).withLength(12));
-        passRepo.save(new Pass().withType(PassType.UNLIMITED).withMonthlyPrice(100).withLength(null));
-        passRepo.save(new Pass().withType(PassType.YEARLY).withMonthlyPrice(70).withLength(12));
+        passTypeRepo.save(new PassType().withType(PassTypeEnum.COLLEGE).withMonthlyPrice(50).withLength(12));
+        passTypeRepo.save(new PassType().withType(PassTypeEnum.SENIOR).withMonthlyPrice(45).withLength(12));
+        passTypeRepo.save(new PassType().withType(PassTypeEnum.DYNAMIC).withMonthlyPrice(85).withLength(12));
+        passTypeRepo.save(new PassType().withType(PassTypeEnum.UNLIMITED).withMonthlyPrice(100).withLength(null));
+        passTypeRepo.save(new PassType().withType(PassTypeEnum.YEARLY).withMonthlyPrice(70).withLength(12));
     }
 
     private void seedPaymentMethodTable() {

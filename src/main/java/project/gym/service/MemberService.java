@@ -32,16 +32,19 @@ import project.gym.model.Contact;
 import project.gym.model.Image;
 import project.gym.model.Member;
 import project.gym.model.Pass;
+import project.gym.model.PassType;
 import project.gym.model.PasswordReset;
 import project.gym.model.PaymentMethod;
 import project.gym.repo.AccountConfirmationRepo;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
 import project.gym.repo.PassRepo;
+import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PasswordResetRepo;
 import project.gym.repo.PaymentMethodRepo;
 
 import java.util.List;
+import java.util.UUID;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -53,6 +56,7 @@ public class MemberService {
     private final MemberRepo memberRepo;
     private final ActivityRepo activityRepo;
     private final PassRepo passRepo;
+    private final PassTypeRepo passTypeRepo;
     private final PaymentMethodRepo paymentMethodRepo;
     private final AccountConfirmationRepo accountConfirmationRepo;
     private final PasswordResetRepo passwordResetRepo;
@@ -66,6 +70,7 @@ public class MemberService {
             MemberRepo memberRepo,
             ActivityRepo activityRepo,
             PassRepo passRepo,
+            PassTypeRepo passTypeRepo,
             PaymentMethodRepo paymentMethodRepo,
             AccountConfirmationRepo accountConfirmationRepo,
             PasswordResetRepo passwordResetRepo,
@@ -76,6 +81,7 @@ public class MemberService {
         this.memberRepo = memberRepo;
         this.activityRepo = activityRepo;
         this.passRepo = passRepo;
+        this.passTypeRepo = passTypeRepo;
         this.paymentMethodRepo = paymentMethodRepo;
         this.accountConfirmationRepo = accountConfirmationRepo;
         this.passwordResetRepo = passwordResetRepo;
@@ -91,7 +97,8 @@ public class MemberService {
         Contact newContact = request.toContact();
         PaymentMethod paymentMethod = paymentMethodRepo.findById(request.getPaymentMethod())
                 .orElseThrow(PaymentMethodDoesNotExist::new);
-        Pass passType = passRepo.findById(request.getPassType()).orElseThrow(PassTypeDoesNotExistException::new);
+        PassType passType = passTypeRepo.findById(request.getPassType())
+                .orElseThrow(PassTypeDoesNotExistException::new);
 
         String accountConfirmationToken = utils.generateUniqueToken();
         AccountConfirmation accountConfirmation = new AccountConfirmation().withToken(accountConfirmationToken);
@@ -99,7 +106,8 @@ public class MemberService {
         newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
         newMember.setContact(newContact);
         newMember.setPaymentMethod(paymentMethod);
-        newMember.setPass(passType);
+        Pass pass = new Pass().withMember(newMember).withType(passType).withUuid(UUID.randomUUID().toString());
+        newMember.setPass(pass);
         newMember.setAccountConfirmation(accountConfirmation);
 
         try {
