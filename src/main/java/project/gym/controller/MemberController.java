@@ -1,7 +1,8 @@
 package project.gym.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import java.time.ZonedDateTime;
+import java.util.List;
+
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,21 +10,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.member.*;
+import project.gym.dto.member.AuthenticationResponse;
+import project.gym.dto.member.ChangePasswordRequest;
+import project.gym.dto.member.ConfirmAccountRequest;
+import project.gym.dto.member.LoginRequest;
+import project.gym.dto.member.RegisterRequest;
+import project.gym.dto.member.RegistrationResponse;
+import project.gym.dto.member.ResetPasswordRequest;
+import project.gym.dto.member.UpdateMemberRequest;
+import project.gym.dto.pass.PassBasics;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
 import project.gym.service.MailService;
 import project.gym.service.MemberService;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/member")
@@ -109,6 +124,13 @@ public class MemberController {
             @RequestPart @Valid UpdateMemberRequest requestBody) {
         Member member = jwtService.getMember(token);
         Member responseBody = memberService.update(member, requestBody, profilePicture);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @GetMapping("/pass-basics")
+    public ResponseEntity<PassBasics> getPass(@RequestHeader("Authorization") String token) {
+        Member member = jwtService.getMember(token);
+        PassBasics responseBody = memberService.getPassBasics(member);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

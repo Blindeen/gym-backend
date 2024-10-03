@@ -1,5 +1,11 @@
 package project.gym.service;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
@@ -19,6 +26,7 @@ import project.gym.dto.member.RegisterRequest;
 import project.gym.dto.member.RegistrationResponse;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
+import project.gym.dto.pass.PassBasics;
 import project.gym.enums.Role;
 import project.gym.exception.AccountAlreadyConfirmed;
 import project.gym.exception.EmailAlreadyExistException;
@@ -41,14 +49,6 @@ import project.gym.repo.MemberRepo;
 import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PasswordResetRepo;
 import project.gym.repo.PaymentMethodRepo;
-
-import java.util.List;
-import java.util.UUID;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class MemberService {
@@ -220,6 +220,11 @@ public class MemberService {
             }
         }
         member.setProfilePicture(profilePictureImage);
+    }
+
+    public PassBasics getPassBasics(Member member) {
+        Pass pass = member.getPass();
+        return PassBasics.valueOf(pass);
     }
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
