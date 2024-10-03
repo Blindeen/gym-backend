@@ -38,7 +38,6 @@ import project.gym.model.PaymentMethod;
 import project.gym.repo.AccountConfirmationRepo;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
-import project.gym.repo.PassRepo;
 import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PasswordResetRepo;
 import project.gym.repo.PaymentMethodRepo;
@@ -55,7 +54,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
     private final MemberRepo memberRepo;
     private final ActivityRepo activityRepo;
-    private final PassRepo passRepo;
     private final PassTypeRepo passTypeRepo;
     private final PaymentMethodRepo paymentMethodRepo;
     private final AccountConfirmationRepo accountConfirmationRepo;
@@ -69,7 +67,6 @@ public class MemberService {
     public MemberService(
             MemberRepo memberRepo,
             ActivityRepo activityRepo,
-            PassRepo passRepo,
             PassTypeRepo passTypeRepo,
             PaymentMethodRepo paymentMethodRepo,
             AccountConfirmationRepo accountConfirmationRepo,
@@ -80,7 +77,6 @@ public class MemberService {
             Utils utils) {
         this.memberRepo = memberRepo;
         this.activityRepo = activityRepo;
-        this.passRepo = passRepo;
         this.passTypeRepo = passTypeRepo;
         this.paymentMethodRepo = paymentMethodRepo;
         this.accountConfirmationRepo = accountConfirmationRepo;
