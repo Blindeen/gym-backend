@@ -7,6 +7,7 @@ import project.gym.model.Pass;
 public class PassBasics {
     private String name;
     private String uuid;
+    private String googleWalletPassToken;
 
     public static PassBasics valueOf(Pass pass) {
         PassBasics passBasics = new PassBasics();

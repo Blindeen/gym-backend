@@ -60,6 +60,7 @@ public class MemberService {
     private final PasswordResetRepo passwordResetRepo;
 
     private final JwtService jwtService;
+    private final GoogleWalletService googleWalletService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final Utils utils;
@@ -72,6 +73,7 @@ public class MemberService {
             AccountConfirmationRepo accountConfirmationRepo,
             PasswordResetRepo passwordResetRepo,
             JwtService jwtService,
+            GoogleWalletService googleWalletService,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
             Utils utils) {
@@ -83,6 +85,7 @@ public class MemberService {
         this.passwordResetRepo = passwordResetRepo;
 
         this.jwtService = jwtService;
+        this.googleWalletService = googleWalletService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.utils = utils;
@@ -224,7 +227,21 @@ public class MemberService {
 
     public PassBasics getPassBasics(Member member) {
         Pass pass = member.getPass();
-        return PassBasics.valueOf(pass);
+
+        PassBasics passBasics = PassBasics.valueOf(pass);
+        String googleWalletToken;
+        try {
+            googleWalletToken = googleWalletService.generateGoogleWalletPass(
+                    "member_" + member.getId(),
+                    passBasics.getUuid(),
+                    member.getFirstName(),
+                    member.getLastName());
+        } catch (IOException e) {
+            googleWalletToken = "";
+        }
+        passBasics.setGoogleWalletPassToken(googleWalletToken);
+
+        return passBasics;
     }
 
     public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
