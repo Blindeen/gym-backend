@@ -1,14 +1,17 @@
 package project.gym.repo;
 
+import java.time.DayOfWeek;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+
 import project.gym.model.Activity;
 import project.gym.model.Member;
-
-import java.util.List;
+import project.gym.model.Room;
 
 public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndSortingRepository<Activity, Long> {
     @NotNull
@@ -19,4 +22,6 @@ public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndS
     Page<Activity> findByTrainerAndNameContains(Member trainer, String name, Pageable pageable);
 
     List<Activity> findByMembersNotContains(Member member);
+
+    List<Activity> findByRoomAndDayOfWeek(Room room, DayOfWeek dayOfWeek);
 }

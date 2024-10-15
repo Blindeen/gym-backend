@@ -1,14 +1,20 @@
 package project.gym.service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import project.gym.dto.activity.ActivityResponse;
 import project.gym.dto.activity.CreateActivityRequest;
 import project.gym.exception.ActivityDoesNotExistException;
 import project.gym.exception.AlreadyEnrolledException;
 import project.gym.exception.RoomDoesNotExistException;
+import project.gym.exception.TermNotAvailableException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Activity;
 import project.gym.model.Member;
@@ -29,6 +35,31 @@ public class ActivityService {
         this.roomRepo = roomRepo;
     }
 
+    private boolean isTermAvailable(Activity newActivity) {
+        Room room = newActivity.getRoom();
+        DayOfWeek dayOfWeek = newActivity.getDayOfWeek();
+
+        List<Activity> existingActivities = activityRepo.findByRoomAndDayOfWeek(room, dayOfWeek);
+        for (Activity activity : existingActivities) {
+            LocalTime startTime = activity.getStartTime();
+            Short durationMin = activity.getDurationMin();
+            LocalTime endTime = startTime.plusMinutes(durationMin);
+
+            LocalTime newActivityStartTime = newActivity.getStartTime();
+            Short newActivityDuration = newActivity.getDurationMin();
+            LocalTime newActivityEndTime = newActivityStartTime.plusMinutes(newActivityDuration);
+
+            boolean isUnavailable = !(newActivityStartTime.isBefore(startTime) && newActivityEndTime.isBefore(startTime))
+                    && !(newActivityStartTime.isAfter(endTime) && newActivityEndTime.isAfter(endTime));
+
+            if (isUnavailable) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @Transactional
     public ActivityResponse createActivity(CreateActivityRequest request, Member trainer) {
         trainer = memberRepo.findById(trainer.getId()).orElseThrow(UserDoesNotExistException::new);
@@ -37,6 +68,11 @@ public class ActivityService {
         Activity newActivity = request.toActivity();
         newActivity.setRoom(room);
         newActivity.setTrainer(trainer);
+
+        if (!isTermAvailable(newActivity)) {
+            throw new TermNotAvailableException();
+        }
+
         newActivity = activityRepo.save(newActivity);
 
         trainer.getTrainerActivities().add(newActivity);
