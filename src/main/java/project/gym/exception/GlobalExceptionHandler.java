@@ -124,11 +124,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleOtherException() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("error", messageSource.getMessage(
-                "InternalServerException.message",
-                null,
-                LocaleContextHolder.getLocale()));
+        Map<String, Map<String, List<String>>> body = new HashMap<>();
+        Map<String, List<String>> errors = new HashMap<>();
+
+        String errorMessage = messageSource.getMessage(
+            "InternalServerException.message",
+            null,
+            LocaleContextHolder.getLocale());
+        errors.put("server", List.of(errorMessage));
+        body.put("errors", errors);
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
