@@ -118,9 +118,10 @@ public class MemberService {
         accountConfirmation = newMember.getAccountConfirmation().withMember(newMember);
         accountConfirmationRepo.save(accountConfirmation);
 
-        String token = jwtService.generateToken(newMember);
+        String accessToken = jwtService.generateAccessToken(newMember);
+        String refreshToken = jwtService.generateRefreshToken(newMember);
 
-        return new RegistrationResponse(new AuthenticationResponse(newMember, token), accountConfirmationToken);
+        return new RegistrationResponse(new AuthenticationResponse(newMember, accessToken, refreshToken), accountConfirmationToken);
     }
 
     public AuthenticationResponse login(LoginRequest request) {
@@ -130,9 +131,10 @@ public class MemberService {
                         request.getPassword()));
 
         Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
-        String token = jwtService.generateToken(member);
-
-        return new AuthenticationResponse(member, token);
+        String accessToken = jwtService.generateAccessToken(member);
+        String refreshToken = jwtService.generateRefreshToken(member);
+        
+        return new AuthenticationResponse(member, accessToken, refreshToken);
     }
 
     public void confirmAccount(ConfirmAccountRequest request) {

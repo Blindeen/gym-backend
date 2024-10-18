@@ -6,10 +6,12 @@ import project.gym.model.Member;
 @Data
 public class AuthenticationResponse {
     private MemberInfo user;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 
-    public AuthenticationResponse(Member member, String token) {
+    public AuthenticationResponse(Member member, String accessToken, String refreshToken) {
         user = MemberInfo.valueOf(member);
-        this.token = token;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }

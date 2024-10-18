@@ -18,7 +18,13 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     @Value("${jwt.secret}")
-    private String JWT_SECRET;
+    private String jwtSecretKey;
+
+    @Value("${jwt.token.access.expiration}")
+    private long accessTokenExpiration;
+
+    @Value("${jwt.token.refresh.expiration}")
+    private long refreshTokenExpiration;
 
     private final MemberRepo memberRepo;
 
@@ -57,19 +63,27 @@ public class JwtService {
                 .getPayload();
     }
 
-    public String generateToken(Member member) {
+    private String generateToken(Member member, long expirationTime) {
         return Jwts
                 .builder()
                 .subject(member.getUsername())
                 .claim("role", member.getRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 24*60*60*1000))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSignInKey())
                 .compact();
     }
 
+    public String generateAccessToken(Member member) {
+        return generateToken(member, accessTokenExpiration);
+    }
+
+    public String generateRefreshToken(Member member) {
+        return generateToken(member, refreshTokenExpiration);
+    }
+
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode(JWT_SECRET);
+        byte[] keyBytes = Decoders.BASE64URL.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
