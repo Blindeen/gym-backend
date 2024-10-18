@@ -1,4 +1,4 @@
-package project.gym.dto.member;
+package project.gym.dto.auth;
 
 import lombok.Data;
 

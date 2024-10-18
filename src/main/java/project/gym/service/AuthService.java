@@ -9,10 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import project.gym.Utils;
-import project.gym.dto.member.AuthenticationResponse;
-import project.gym.dto.member.LoginRequest;
-import project.gym.dto.member.RegisterRequest;
-import project.gym.dto.member.RegistrationResponse;
+import project.gym.dto.auth.AuthenticationResponse;
+import project.gym.dto.auth.LoginRequest;
+import project.gym.dto.auth.RefreshTokenResponse;
+import project.gym.dto.auth.RegisterRequest;
+import project.gym.dto.auth.RegistrationResponse;
 import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.PassTypeDoesNotExistException;
 import project.gym.exception.PaymentMethodDoesNotExist;
@@ -41,7 +42,8 @@ public class AuthService {
     private final Utils utils;
 
     public AuthService(
-            MemberRepo memberRepo, PaymentMethodRepo paymentMethodRepo, PassTypeRepo passTypeRepo, AccountConfirmationRepo accountConfirmationRepo,
+            MemberRepo memberRepo, PaymentMethodRepo paymentMethodRepo, PassTypeRepo passTypeRepo,
+            AccountConfirmationRepo accountConfirmationRepo,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
@@ -102,5 +104,14 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(member);
 
         return new AuthenticationResponse(member, accessToken, refreshToken);
+    }
+
+    public RefreshTokenResponse refreshToken(String token) {
+        Member member = jwtService.getMember(token);
+
+        String accessToken = jwtService.generateAccessToken(member);
+        String refreshToken = jwtService.generateRefreshToken(member);
+
+        return new RefreshTokenResponse(accessToken, refreshToken);
     }
 }
