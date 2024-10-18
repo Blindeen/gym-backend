@@ -1,9 +1,7 @@
 package project.gym.controller;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,12 +23,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.LoginRequest;
-import project.gym.dto.member.RegisterRequest;
-import project.gym.dto.member.RegistrationResponse;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.dto.pass.PassBasics;
@@ -53,42 +47,6 @@ public class MemberController {
         this.jwtService = jwtService;
         this.mailService = mailService;
         this.utils = utils;
-    }
-
-    @PostMapping("/sign-up")
-    public ResponseEntity<AuthenticationResponse> signUp(
-            HttpServletRequest request,
-            @RequestBody @Valid RegisterRequest requestBody) {
-        RegistrationResponse registrationResponse = memberService.register(requestBody);
-        AuthenticationResponse responseBody = registrationResponse.getAuthenticationResponse();
-
-        String email = responseBody.getUser().getEmail();
-        String firstName = responseBody.getUser().getFirstName();
-        String serverHostName = utils.getServerHostName(request);
-        String confirmAccountToken = registrationResponse.getConfirmAccountToken();
-
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignUpConfirmation(email, firstName, serverHostName, confirmAccountToken);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/sign-in")
-    public ResponseEntity<AuthenticationResponse> signIn(
-            HttpServletRequest request,
-            @RequestBody @Valid LoginRequest requestBody) {
-        AuthenticationResponse responseBody = memberService.login(requestBody);
-
-        String emailTo = responseBody.getUser().getEmail();
-        String clientIpAddress = utils.getClientAddr(request);
-        String browser = utils.getBrowser(request);
-        String serverName = utils.getServerHostName(request);
-        ZonedDateTime dateTime = utils.nowUTCDateTime();
-
-        LocaleContextHolder.setLocale(LocaleContextHolder.getLocale(), true);
-        mailService.sendSignInConfirmation(emailTo, clientIpAddress, browser, serverName, dateTime);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @PutMapping("/confirm-account")
