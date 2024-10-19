@@ -4,135 +4,63 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.member.AuthenticationResponse;
 import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.LoginRequest;
-import project.gym.dto.member.RegisterRequest;
-import project.gym.dto.member.RegistrationResponse;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
 import project.gym.dto.pass.PassBasics;
 import project.gym.enums.Role;
 import project.gym.exception.AccountAlreadyConfirmed;
-import project.gym.exception.EmailAlreadyExistException;
 import project.gym.exception.InvalidTokenException;
-import project.gym.exception.PassTypeDoesNotExistException;
-import project.gym.exception.PaymentMethodDoesNotExist;
 import project.gym.exception.TokenExpiredException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.AccountConfirmation;
-import project.gym.model.Contact;
 import project.gym.model.Image;
 import project.gym.model.Member;
 import project.gym.model.Pass;
-import project.gym.model.PassType;
 import project.gym.model.PasswordReset;
-import project.gym.model.PaymentMethod;
 import project.gym.repo.AccountConfirmationRepo;
 import project.gym.repo.ActivityRepo;
 import project.gym.repo.MemberRepo;
-import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PasswordResetRepo;
-import project.gym.repo.PaymentMethodRepo;
 
 @Service
 public class MemberService {
     private final MemberRepo memberRepo;
     private final ActivityRepo activityRepo;
-    private final PassTypeRepo passTypeRepo;
-    private final PaymentMethodRepo paymentMethodRepo;
     private final AccountConfirmationRepo accountConfirmationRepo;
     private final PasswordResetRepo passwordResetRepo;
 
-    private final JwtService jwtService;
     private final GoogleWalletService googleWalletService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final Utils utils;
 
     public MemberService(
             MemberRepo memberRepo,
             ActivityRepo activityRepo,
-            PassTypeRepo passTypeRepo,
-            PaymentMethodRepo paymentMethodRepo,
             AccountConfirmationRepo accountConfirmationRepo,
             PasswordResetRepo passwordResetRepo,
-            JwtService jwtService,
             GoogleWalletService googleWalletService,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager,
             Utils utils) {
         this.memberRepo = memberRepo;
         this.activityRepo = activityRepo;
-        this.passTypeRepo = passTypeRepo;
-        this.paymentMethodRepo = paymentMethodRepo;
         this.accountConfirmationRepo = accountConfirmationRepo;
         this.passwordResetRepo = passwordResetRepo;
 
-        this.jwtService = jwtService;
         this.googleWalletService = googleWalletService;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
         this.utils = utils;
-    }
-
-    public RegistrationResponse register(RegisterRequest request) {
-        Member newMember = request.toMember();
-        Contact newContact = request.toContact();
-        PaymentMethod paymentMethod = paymentMethodRepo.findById(request.getPaymentMethod())
-                .orElseThrow(PaymentMethodDoesNotExist::new);
-        PassType passType = passTypeRepo.findById(request.getPassType())
-                .orElseThrow(PassTypeDoesNotExistException::new);
-
-        String accountConfirmationToken = utils.generateUniqueToken();
-        AccountConfirmation accountConfirmation = new AccountConfirmation().withToken(accountConfirmationToken);
-
-        newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
-        newMember.setContact(newContact);
-        newMember.setPaymentMethod(paymentMethod);
-        Pass pass = new Pass().withMember(newMember).withType(passType).withUuid(UUID.randomUUID().toString());
-        newMember.setPass(pass);
-        newMember.setAccountConfirmation(accountConfirmation);
-
-        try {
-            newMember = memberRepo.save(newMember);
-        } catch (DataIntegrityViolationException e) {
-            throw new EmailAlreadyExistException();
-        }
-
-        accountConfirmation = newMember.getAccountConfirmation().withMember(newMember);
-        accountConfirmationRepo.save(accountConfirmation);
-
-        String token = jwtService.generateToken(newMember);
-
-        return new RegistrationResponse(new AuthenticationResponse(newMember, token), accountConfirmationToken);
-    }
-
-    public AuthenticationResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()));
-
-        Member member = memberRepo.findByEmail(request.getEmail()).orElseThrow(UserDoesNotExistException::new);
-        String token = jwtService.generateToken(member);
-
-        return new AuthenticationResponse(member, token);
     }
 
     public void confirmAccount(ConfirmAccountRequest request) {

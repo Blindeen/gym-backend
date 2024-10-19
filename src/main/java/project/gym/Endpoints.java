@@ -1,8 +1,9 @@
 package project.gym;
 
 public class Endpoints {
-    public static final String SIGN_UP = "/member/sign-up";
-    public static final String SIGN_IN = "/member/sign-in";
+    public static final String SIGN_UP = "/auth/sign-up";
+    public static final String SIGN_IN = "/auth/sign-in";
+
     public static final String MEMBER_INFO = "/member";
     public static final String UPDATE_MEMBER = "/member/update";
     public static final String MEMBER_ACTIVITIES = "/member/activities";
