@@ -1,14 +1,15 @@
 package project.gym.dto.activity;
 
-import lombok.Data;
-import project.gym.model.Activity;
-
 import java.time.DayOfWeek;
-import java.time.format.TextStyle;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
+
+import lombok.Data;
+import project.gym.model.Activity;
+import project.gym.model.Member;
 
 @Data
 public class ActivityResponse {
@@ -20,7 +21,7 @@ public class ActivityResponse {
     private String startTime;
     private Short durationMin;
     private String room;
-    private TrainerInfo trainer;
+    private String trainer;
 
     public static ActivityResponse valueOf(Activity activity) {
         ActivityResponse activityResponse = new ActivityResponse();
@@ -35,7 +36,9 @@ public class ActivityResponse {
 
         activityResponse.durationMin = activity.getDurationMin();
         activityResponse.room = activity.getRoom().getName();
-        activityResponse.trainer = TrainerInfo.valueOf(activity.getTrainer());
+
+        Member trainer = activity.getTrainer();
+        activityResponse.trainer = String.format("%s %s", trainer.getFirstName(), trainer.getLastName());
 
         return activityResponse;
     }
