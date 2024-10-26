@@ -10,6 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import lombok.Data;
 import project.gym.model.Activity;
 import project.gym.model.Member;
+import project.gym.model.Room;
 
 @Data
 public class ActivityResponse {
@@ -17,10 +18,10 @@ public class ActivityResponse {
 
     private Long id;
     private String name;
-    private String dayOfWeek;
+    private DayOfWeekResponse dayOfWeek;
     private String startTime;
-    private Short durationMin;
-    private String room;
+    private String durationMin;
+    private Room room;
     private String trainer;
 
     public static ActivityResponse valueOf(Activity activity) {
@@ -30,12 +31,12 @@ public class ActivityResponse {
 
         DayOfWeek dayOfWeek = activity.getDayOfWeek();
         String dayOfWeekString = dayOfWeek.getDisplayName(TextStyle.FULL, LocaleContextHolder.getLocale());
-        activityResponse.dayOfWeek = StringUtils.capitalize(dayOfWeekString);
+        activityResponse.dayOfWeek = new DayOfWeekResponse(StringUtils.capitalize(dayOfWeekString), dayOfWeek.toString());
 
         activityResponse.startTime = activity.getStartTime().format(formatter);
 
-        activityResponse.durationMin = activity.getDurationMin();
-        activityResponse.room = activity.getRoom().getName();
+        activityResponse.durationMin = activity.getDurationMin().toString();
+        activityResponse.room = activity.getRoom();
 
         Member trainer = activity.getTrainer();
         activityResponse.trainer = String.format("%s %s", trainer.getFirstName(), trainer.getLastName());
