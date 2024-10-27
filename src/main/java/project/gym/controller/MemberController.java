@@ -49,13 +49,13 @@ public class MemberController {
         this.utils = utils;
     }
 
-    @PutMapping("/confirm-account")
+    @PutMapping("/confirmation")
     public ResponseEntity<Void> confirmAccount(@RequestBody @Valid ConfirmAccountRequest requestBody) {
         memberService.confirmAccount(requestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/password/reset")
     public ResponseEntity<Void> resetPassword(
             HttpServletRequest request,
             @RequestBody @Valid ResetPasswordRequest requestBody) {
@@ -69,14 +69,14 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/change-password")
+    @PutMapping("/password/change")
     public ResponseEntity<Void> changePassword(@RequestBody @Valid ChangePasswordRequest requestBody) {
         memberService.changePassword(requestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(path = "/update", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Member> update(
+    @PutMapping(path = "/profile", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Member> updateProfile(
             @RequestHeader("Authorization") String token,
             @RequestPart(required = false) MultipartFile profilePicture,
             @RequestPart @Valid UpdateMemberRequest requestBody) {
@@ -85,7 +85,7 @@ public class MemberController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @GetMapping("/pass-basics")
+    @GetMapping("/pass")
     public ResponseEntity<PassBasics> getPass(@RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
         PassBasics responseBody = memberService.getPassBasics(member);
@@ -93,7 +93,7 @@ public class MemberController {
     }
 
     @GetMapping("/activities")
-    public ResponseEntity<Page<ActivityResponse>> getMyActivities(
+    public ResponseEntity<Page<ActivityResponse>> getActivities(
             @RequestHeader("Authorization") String token,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize,
