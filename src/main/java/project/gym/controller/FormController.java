@@ -17,7 +17,7 @@ import project.gym.repo.RoomRepo;
 import project.gym.service.JwtService;
 
 @RestController
-@RequestMapping("/form")
+@RequestMapping("/forms")
 public class FormController {
     private final PassTypeRepo passTypeRepo;
     private final PaymentMethodRepo paymentMethodRepo;
@@ -32,20 +32,22 @@ public class FormController {
         this.jwtService = jwtService;
     }
 
-    @GetMapping("/sign-up/prepare")
-    public SignUpFormData prepareSignUpForm() {
-        return new SignUpFormData(passTypeRepo.findAll(), paymentMethodRepo.findAll());
+    @GetMapping("/sign-up")
+    public ResponseEntity<SignUpFormData> prepareSignUpForm() {
+        SignUpFormData signUpFormData = new SignUpFormData(passTypeRepo.findAll(), paymentMethodRepo.findAll());
+        return new ResponseEntity<>(signUpFormData, HttpStatus.OK);
     }
 
-    @GetMapping("/edit-profile/prepare")
-    public EditProfileFormData prepareEditProfileForme(@RequestHeader("Authorization") String token) {
+    @GetMapping("/edit-profile")
+    public ResponseEntity<EditProfileFormData> prepareEditProfileForme(@RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
-        return new EditProfileFormData(member);
+        EditProfileFormData editProfileFormData = new EditProfileFormData(member);
+        return new ResponseEntity<>(editProfileFormData, HttpStatus.OK);
     }
 
-    @GetMapping("/add-edit-activity/prepare")
+    @GetMapping("/add-edit-activity")
     public ResponseEntity<AddEditActivityFormData> prepareAddEditActivityForm() {
-        return new ResponseEntity<>(new AddEditActivityFormData(roomRepo.findAll()), HttpStatus.OK);
+        AddEditActivityFormData addEditActivityFormData = new AddEditActivityFormData(roomRepo.findAll());
+        return new ResponseEntity<>(addEditActivityFormData, HttpStatus.OK);
     }
-
 }
