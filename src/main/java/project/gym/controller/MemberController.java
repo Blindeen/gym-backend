@@ -35,7 +35,7 @@ import project.gym.service.MailService;
 import project.gym.service.MemberService;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
     private final JwtService jwtService;
