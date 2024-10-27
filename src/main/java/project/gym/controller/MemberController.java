@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -99,7 +100,7 @@ public class MemberController {
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "") String name) {
         Member member = jwtService.getMember(token);
-        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
+        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize, Sort.by("id"));
         Page<ActivityResponse> responseBody = memberService.getMyActivities(name, member, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
