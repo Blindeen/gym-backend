@@ -20,6 +20,11 @@ public class CloudinaryService {
     private final static String PUBLIC_ID_KEY = "public_id";
     private final static String RESOURCE_TYPE_KEY = "resource_type";
     private final static String OVERWRITE_KEY = "overwrite";
+    private final static String RESOURCE_TYPE_IMAGE = "image";
+    private final static String FOLDER_KEY = "folder";
+    private final static String FOLDER_VALUE = "members/avatar";
+
+    private final static String SECURE_URL_KEY = "secure_url";
 
     private final Cloudinary cloudinary;
 
@@ -34,13 +39,15 @@ public class CloudinaryService {
                 SECURE_KEY, true));
     }
 
+    @SuppressWarnings("unchecked")
     public String uploadImage(MultipartFile multipartFile, String publicID) throws IOException {
         Map<String, Object> params = ObjectUtils.asMap(
                 PUBLIC_ID_KEY, publicID,
-                RESOURCE_TYPE_KEY, "image",
+                RESOURCE_TYPE_KEY, RESOURCE_TYPE_IMAGE,
+                FOLDER_KEY, FOLDER_VALUE,
                 OVERWRITE_KEY, true);
         Map<String, Object> response = cloudinary.uploader().upload(multipartFile.getBytes(), params);
-        return (String) response.get("secure_url");
+        return (String) response.get(SECURE_URL_KEY);
     }
 
 }
