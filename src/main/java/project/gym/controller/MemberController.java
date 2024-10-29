@@ -28,6 +28,7 @@ import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
+import project.gym.dto.member.UploadAvatarResponse;
 import project.gym.dto.pass.PassBasics;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
@@ -76,13 +77,21 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(path = "/profile", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PutMapping("/profile")
     public ResponseEntity<Member> updateProfile(
             @RequestHeader("Authorization") String token,
-            @RequestPart(required = false) MultipartFile profilePicture,
-            @RequestPart @Valid UpdateMemberRequest requestBody) {
+            @RequestBody @Valid UpdateMemberRequest requestBody) {
         Member member = jwtService.getMember(token);
-        Member responseBody = memberService.update(member, requestBody, profilePicture);
+        Member responseBody = memberService.update(member, requestBody);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/avatar", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<UploadAvatarResponse> uploadAvatar(
+            @RequestHeader("Authorization") String token,
+            @RequestPart MultipartFile avatar) {
+        Member member = jwtService.getMember(token);
+        UploadAvatarResponse responseBody = memberService.uploadAvatar(member, avatar);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

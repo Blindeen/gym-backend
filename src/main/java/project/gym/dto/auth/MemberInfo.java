@@ -1,7 +1,6 @@
 package project.gym.dto.auth;
 
 import lombok.Data;
-import project.gym.model.Image;
 import project.gym.model.Member;
 
 @Data
@@ -10,7 +9,7 @@ public class MemberInfo {
     private String lastName;
     private String email;
     private String role;
-    private Image profilePicture;
+    private String avatarURL;
 
     public static MemberInfo valueOf(Member member) {
         MemberInfo memberInfo = new MemberInfo();
@@ -18,7 +17,7 @@ public class MemberInfo {
         memberInfo.lastName = member.getLastName();
         memberInfo.email = member.getEmail();
         memberInfo.role = member.getRole().toString();
-        memberInfo.profilePicture = member.getProfilePicture();
+        memberInfo.avatarURL = member.getAvatarURL();
 
         return memberInfo;
     }
