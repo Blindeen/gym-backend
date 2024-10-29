@@ -24,11 +24,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
-import project.gym.dto.member.UploadAvatarResponse;
 import project.gym.dto.pass.PassBasics;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
@@ -87,11 +87,11 @@ public class MemberController {
     }
 
     @PutMapping(path = "/avatar", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<UploadAvatarResponse> uploadAvatar(
+    public ResponseEntity<UploadImageResponse> uploadAvatar(
             @RequestHeader("Authorization") String token,
-            @RequestPart MultipartFile avatar) {
+            @RequestPart MultipartFile image) {
         Member member = jwtService.getMember(token);
-        UploadAvatarResponse responseBody = memberService.uploadAvatar(member, avatar);
+        UploadImageResponse responseBody = memberService.uploadAvatar(member, image);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

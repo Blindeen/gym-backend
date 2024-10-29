@@ -14,11 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.ResetPasswordRequest;
 import project.gym.dto.member.UpdateMemberRequest;
-import project.gym.dto.member.UploadAvatarResponse;
 import project.gym.dto.pass.PassBasics;
 import project.gym.enums.Role;
 import project.gym.exception.AccountAlreadyConfirmed;
@@ -132,11 +132,11 @@ public class MemberService {
 
             member.setPassword(passwordEncoder.encode(newPassword));
         }
-        
+
         return memberRepo.save(member);
     }
 
-    public UploadAvatarResponse uploadAvatar(Member member, MultipartFile file) {
+    public UploadImageResponse uploadAvatar(Member member, MultipartFile file) {
         String publicID = "member_" + member.getId();
         String avatarURL = null;
         try {
@@ -148,7 +148,7 @@ public class MemberService {
         member.setAvatarURL(avatarURL);
         memberRepo.save(member);
 
-        return new UploadAvatarResponse(avatarURL);
+        return new UploadImageResponse(avatarURL);
     }
 
     public PassBasics getPassBasics(Member member) {
