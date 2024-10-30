@@ -30,6 +30,7 @@ import project.gym.dto.members.UpdateMemberRequest;
 import project.gym.dto.members.pass.PassBasics;
 import project.gym.dto.members.password.ChangePasswordRequest;
 import project.gym.dto.members.password.ResetPasswordRequest;
+import project.gym.dto.members.trainers.TrainerInfo;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
@@ -122,9 +123,9 @@ public class MemberController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    // @GetMapping("/trainers")
-    // public ResponseEntity<List<Member>> getTrainers() {
-    //     List<Member> responseBody = memberService.getTrainers();
-    //     return new ResponseEntity<>(responseBody, HttpStatus.OK);
-    // }
+    @GetMapping("/trainers")
+    public ResponseEntity<List<TrainerInfo>> getTrainers() {
+        List<TrainerInfo> responseBody = memberService.getTrainers();
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
 }

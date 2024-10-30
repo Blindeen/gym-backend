@@ -20,6 +20,7 @@ import project.gym.dto.members.UpdateMemberRequest;
 import project.gym.dto.members.pass.PassBasics;
 import project.gym.dto.members.password.ChangePasswordRequest;
 import project.gym.dto.members.password.ResetPasswordRequest;
+import project.gym.dto.members.trainers.TrainerInfo;
 import project.gym.enums.Role;
 import project.gym.exception.AccountAlreadyConfirmed;
 import project.gym.exception.InvalidTokenException;
@@ -184,5 +185,10 @@ public class MemberService {
     public List<ActivityResponse> getAvailableActivities(Member member) {
         return activityRepo.findByMembersNotContains(member)
                 .stream().map(ActivityResponse::valueOf).toList();
+    }
+
+    public List<TrainerInfo> getTrainers() {
+        return memberRepo.findByRole(Role.TRAINER)
+                .stream().map(TrainerInfo::valueOf).toList();
     }
 }
