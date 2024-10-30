@@ -124,6 +124,13 @@
             <artifactId>google-api-services-walletobjects</artifactId>
             <version>v1-rev20240927-2.0.0</version>
         </dependency>
+
+        <!-- Cloudinary dependency -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.34.0</version>
+        </dependency>
     </dependencies>
 
     <build>

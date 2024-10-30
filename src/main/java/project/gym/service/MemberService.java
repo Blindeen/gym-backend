@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
 import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.member.ChangePasswordRequest;
 import project.gym.dto.member.ConfirmAccountRequest;
 import project.gym.dto.member.ResetPasswordRequest;
@@ -25,7 +26,6 @@ import project.gym.exception.InvalidTokenException;
 import project.gym.exception.TokenExpiredException;
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.AccountConfirmation;
-import project.gym.model.Image;
 import project.gym.model.Member;
 import project.gym.model.Pass;
 import project.gym.model.PasswordReset;
@@ -42,6 +42,7 @@ public class MemberService {
     private final PasswordResetRepo passwordResetRepo;
 
     private final GoogleWalletService googleWalletService;
+    private final CloudinaryService cloudinaryService;
     private final PasswordEncoder passwordEncoder;
     private final Utils utils;
 
@@ -51,6 +52,7 @@ public class MemberService {
             AccountConfirmationRepo accountConfirmationRepo,
             PasswordResetRepo passwordResetRepo,
             GoogleWalletService googleWalletService,
+            CloudinaryService cloudinaryService,
             PasswordEncoder passwordEncoder,
             Utils utils) {
         this.memberRepo = memberRepo;
@@ -59,6 +61,7 @@ public class MemberService {
         this.passwordResetRepo = passwordResetRepo;
 
         this.googleWalletService = googleWalletService;
+        this.cloudinaryService = cloudinaryService;
         this.passwordEncoder = passwordEncoder;
         this.utils = utils;
     }
@@ -114,7 +117,7 @@ public class MemberService {
         memberRepo.save(member);
     }
 
-    public Member update(Member member, UpdateMemberRequest request, MultipartFile profilePicture) {
+    public Member update(Member member, UpdateMemberRequest request) {
         member.setFirstName(request.getFirstName());
         member.setLastName(request.getLastName());
         member.setContact(request.toContact());
@@ -130,27 +133,22 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 
-        if (profilePicture != null) {
-            createUpdateProfilePicture(member, profilePicture);
-        }
-
         return memberRepo.save(member);
     }
 
-    private void createUpdateProfilePicture(Member member, MultipartFile profilePicture) {
-        Image profilePictureImage = member.getProfilePicture();
-        if (profilePictureImage == null) {
-            profilePictureImage = Image.valueOf(profilePicture);
-        } else {
-            profilePictureImage.setName(profilePicture.getOriginalFilename());
-            profilePictureImage.setType(profilePicture.getContentType());
-            try {
-                profilePictureImage.setData(profilePicture.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public UploadImageResponse uploadAvatar(Member member, MultipartFile file) {
+        String publicID = "member_" + member.getId();
+        String avatarURL = null;
+        try {
+            avatarURL = cloudinaryService.uploadImage(file, publicID);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        member.setProfilePicture(profilePictureImage);
+
+        member.setAvatarURL(avatarURL);
+        memberRepo.save(member);
+
+        return new UploadImageResponse(avatarURL);
     }
 
     public PassBasics getPassBasics(Member member) {
