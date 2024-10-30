@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.activity.CreateActivityRequest;
-import project.gym.dto.activity.UpdateActivityRequest;
+import project.gym.dto.activities.ActivityResponse;
+import project.gym.dto.activities.CreateActivityRequest;
+import project.gym.dto.activities.UpdateActivityRequest;
 import project.gym.model.Member;
 import project.gym.service.ActivityService;
 import project.gym.service.JwtService;

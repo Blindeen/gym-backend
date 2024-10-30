@@ -23,13 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
-import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
-import project.gym.dto.member.ChangePasswordRequest;
-import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.ResetPasswordRequest;
-import project.gym.dto.member.UpdateMemberRequest;
-import project.gym.dto.pass.PassBasics;
+import project.gym.dto.members.ConfirmAccountRequest;
+import project.gym.dto.members.UpdateMemberRequest;
+import project.gym.dto.members.pass.PassBasics;
+import project.gym.dto.members.password.ChangePasswordRequest;
+import project.gym.dto.members.password.ResetPasswordRequest;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
@@ -121,4 +121,10 @@ public class MemberController {
         List<ActivityResponse> responseBody = memberService.getAvailableActivities(member);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+    // @GetMapping("/trainers")
+    // public ResponseEntity<List<Member>> getTrainers() {
+    //     List<Member> responseBody = memberService.getTrainers();
+    //     return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    // }
 }

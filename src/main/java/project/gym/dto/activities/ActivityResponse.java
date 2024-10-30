@@ -1,4 +1,4 @@
-package project.gym.dto.activity;
+package project.gym.dto.activities;
 
 import java.time.DayOfWeek;
 import java.time.format.DateTimeFormatter;

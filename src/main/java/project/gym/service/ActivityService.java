@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import project.gym.dto.activity.ActivityResponse;
-import project.gym.dto.activity.CreateActivityRequest;
+import project.gym.dto.activities.ActivityResponse;
+import project.gym.dto.activities.CreateActivityRequest;
 import project.gym.exception.ActivityDoesNotExistException;
 import project.gym.exception.AlreadyEnrolledException;
 import project.gym.exception.RoomDoesNotExistException;
