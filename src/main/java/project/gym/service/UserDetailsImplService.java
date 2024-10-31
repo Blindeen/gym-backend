@@ -3,6 +3,7 @@ package project.gym.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.repo.MemberRepo;
 

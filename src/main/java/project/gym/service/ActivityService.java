@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.activities.CreateActivityRequest;
-import project.gym.exception.ActivityDoesNotExistException;
-import project.gym.exception.AlreadyEnrolledException;
-import project.gym.exception.RoomDoesNotExistException;
-import project.gym.exception.TermNotAvailableException;
 import project.gym.exception.UserDoesNotExistException;
+import project.gym.exception.activities.ActivityDoesNotExistException;
+import project.gym.exception.activities.AlreadyEnrolledException;
+import project.gym.exception.activities.RoomDoesNotExistException;
+import project.gym.exception.activities.TermNotAvailableException;
 import project.gym.model.Activity;
 import project.gym.model.Member;
 import project.gym.model.Room;

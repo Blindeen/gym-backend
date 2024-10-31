@@ -1,6 +1,11 @@
 package project.gym.exception;
 
-import io.jsonwebtoken.JwtException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,11 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
+import io.jsonwebtoken.JwtException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -128,9 +129,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, List<String>> errors = new HashMap<>();
 
         String errorMessage = messageSource.getMessage(
-            "InternalServerException.message",
-            null,
-            LocaleContextHolder.getLocale());
+                "InternalServerException.message",
+                null,
+                LocaleContextHolder.getLocale());
         errors.put("server", List.of(errorMessage));
         body.put("errors", errors);
 
