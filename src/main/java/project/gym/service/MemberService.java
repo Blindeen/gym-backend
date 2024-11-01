@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,6 @@ import project.gym.dto.members.password.ChangePasswordRequest;
 import project.gym.dto.members.password.ResetPasswordRequest;
 import project.gym.dto.members.trainers.TrainerInfo;
 import project.gym.enums.Role;
-import project.gym.exception.UserDoesNotExistException;
 import project.gym.exception.members.confirmation.AccountAlreadyConfirmed;
 import project.gym.exception.members.confirmation.InvalidTokenException;
 import project.gym.exception.members.confirmation.TokenExpiredException;
@@ -87,7 +87,12 @@ public class MemberService {
 
     public PasswordReset resetPassword(ResetPasswordRequest request) {
         String email = request.getEmail();
-        Member member = memberRepo.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
+        Optional<Member> optionalMember = memberRepo.findByEmail(email);
+        if (optionalMember.isEmpty()) {
+            return null;
+        }
+
+        Member member = optionalMember.get();
 
         PasswordReset passwordReset = member.getPasswordReset();
         if (passwordReset == null) {

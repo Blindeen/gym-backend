@@ -64,10 +64,12 @@ public class MemberController {
             @RequestBody @Valid ResetPasswordRequest requestBody) {
         PasswordReset passwordReset = memberService.resetPassword(requestBody);
 
-        String email = requestBody.getEmail();
-        String token = passwordReset.getToken();
-        String serverName = utils.getServerHostName(request);
-        mailService.sendPasswordReset(email, token, serverName);
+        if (passwordReset != null) {
+            String email = requestBody.getEmail();
+            String token = passwordReset.getToken();
+            String serverName = utils.getServerHostName(request);
+            mailService.sendPasswordReset(email, token, serverName);
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
