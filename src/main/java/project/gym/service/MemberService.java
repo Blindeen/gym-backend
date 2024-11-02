@@ -193,7 +193,7 @@ public class MemberService {
     }
 
     public List<TrainerInfo> getTrainers() {
-        return memberRepo.findByRole(Role.TRAINER)
+        return memberRepo.findByRoleOrderByIdAsc(Role.TRAINER)
                 .stream().map(TrainerInfo::valueOf).toList();
     }
 }
