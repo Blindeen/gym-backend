@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import project.gym.dto.form.AddEditActivityFormData;
-import project.gym.dto.form.EditProfileFormData;
-import project.gym.dto.form.SignUpFormData;
+import project.gym.dto.forms.AddEditActivityFormData;
+import project.gym.dto.forms.EditProfileFormData;
+import project.gym.dto.forms.SignUpFormData;
 import project.gym.model.Member;
 import project.gym.repo.PassTypeRepo;
 import project.gym.repo.PaymentMethodRepo;

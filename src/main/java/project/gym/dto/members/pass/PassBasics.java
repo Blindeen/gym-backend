@@ -1,4 +1,4 @@
-package project.gym.dto.pass;
+package project.gym.dto.members.pass;
 
 import lombok.Data;
 import project.gym.model.Pass;

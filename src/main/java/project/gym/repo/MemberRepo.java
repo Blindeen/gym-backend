@@ -1,10 +1,16 @@
 package project.gym.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import project.gym.model.Member;
-
+import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepo extends CrudRepository<Member, Long> {
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import project.gym.enums.Role;
+import project.gym.model.Member;
+
+public interface MemberRepo extends CrudRepository<Member, Long>, PagingAndSortingRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
+
+    List<Member> findByRoleOrderByIdAsc(Role role);
 }

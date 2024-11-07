@@ -1,4 +1,4 @@
-package project.gym.dto.activity;
+package project.gym.dto.activities;
 
 import lombok.Data;
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,18 +14,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
-import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
-import project.gym.dto.member.ChangePasswordRequest;
-import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.ResetPasswordRequest;
-import project.gym.dto.member.UpdateMemberRequest;
-import project.gym.dto.pass.PassBasics;
+import project.gym.dto.members.ConfirmAccountRequest;
+import project.gym.dto.members.UpdateMemberRequest;
+import project.gym.dto.members.pass.PassBasics;
+import project.gym.dto.members.password.ChangePasswordRequest;
+import project.gym.dto.members.password.ResetPasswordRequest;
+import project.gym.dto.members.trainers.TrainerInfo;
 import project.gym.enums.Role;
-import project.gym.exception.AccountAlreadyConfirmed;
-import project.gym.exception.InvalidTokenException;
-import project.gym.exception.TokenExpiredException;
-import project.gym.exception.UserDoesNotExistException;
+import project.gym.exception.members.confirmation.AccountAlreadyConfirmed;
+import project.gym.exception.members.confirmation.InvalidTokenException;
+import project.gym.exception.members.confirmation.TokenExpiredException;
 import project.gym.model.AccountConfirmation;
 import project.gym.model.Member;
 import project.gym.model.Pass;
@@ -86,7 +87,12 @@ public class MemberService {
 
     public PasswordReset resetPassword(ResetPasswordRequest request) {
         String email = request.getEmail();
-        Member member = memberRepo.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
+        Optional<Member> optionalMember = memberRepo.findByEmail(email);
+        if (optionalMember.isEmpty()) {
+            return null;
+        }
+
+        Member member = optionalMember.get();
 
         PasswordReset passwordReset = member.getPasswordReset();
         if (passwordReset == null) {
@@ -184,5 +190,10 @@ public class MemberService {
     public List<ActivityResponse> getAvailableActivities(Member member) {
         return activityRepo.findByMembersNotContains(member)
                 .stream().map(ActivityResponse::valueOf).toList();
+    }
+
+    public List<TrainerInfo> getTrainers() {
+        return memberRepo.findByRoleOrderByIdAsc(Role.TRAINER)
+                .stream().map(TrainerInfo::valueOf).toList();
     }
 }

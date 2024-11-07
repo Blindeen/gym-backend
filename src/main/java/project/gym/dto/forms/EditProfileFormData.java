@@ -1,4 +1,4 @@
-package project.gym.dto.form;
+package project.gym.dto.forms;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 

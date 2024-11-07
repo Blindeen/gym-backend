@@ -1,4 +1,4 @@
-package project.gym.dto.member;
+package project.gym.dto.members;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;

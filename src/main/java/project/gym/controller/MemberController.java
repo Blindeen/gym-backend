@@ -23,13 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
-import project.gym.dto.activity.ActivityResponse;
+import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
-import project.gym.dto.member.ChangePasswordRequest;
-import project.gym.dto.member.ConfirmAccountRequest;
-import project.gym.dto.member.ResetPasswordRequest;
-import project.gym.dto.member.UpdateMemberRequest;
-import project.gym.dto.pass.PassBasics;
+import project.gym.dto.members.ConfirmAccountRequest;
+import project.gym.dto.members.UpdateMemberRequest;
+import project.gym.dto.members.pass.PassBasics;
+import project.gym.dto.members.password.ChangePasswordRequest;
+import project.gym.dto.members.password.ResetPasswordRequest;
+import project.gym.dto.members.trainers.TrainerInfo;
 import project.gym.model.Member;
 import project.gym.model.PasswordReset;
 import project.gym.service.JwtService;
@@ -63,10 +64,12 @@ public class MemberController {
             @RequestBody @Valid ResetPasswordRequest requestBody) {
         PasswordReset passwordReset = memberService.resetPassword(requestBody);
 
-        String email = requestBody.getEmail();
-        String token = passwordReset.getToken();
-        String serverName = utils.getServerHostName(request);
-        mailService.sendPasswordReset(email, token, serverName);
+        if (passwordReset != null) {
+            String email = requestBody.getEmail();
+            String token = passwordReset.getToken();
+            String serverName = utils.getServerHostName(request);
+            mailService.sendPasswordReset(email, token, serverName);
+        }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -119,6 +122,12 @@ public class MemberController {
             @RequestHeader("Authorization") String token) {
         Member member = jwtService.getMember(token);
         List<ActivityResponse> responseBody = memberService.getAvailableActivities(member);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @GetMapping("/trainers")
+    public ResponseEntity<List<TrainerInfo>> getTrainers() {
+        List<TrainerInfo> responseBody = memberService.getTrainers();
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 }

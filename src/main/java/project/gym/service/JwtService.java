@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 import project.gym.exception.UserDoesNotExistException;
 import project.gym.model.Member;
 import project.gym.repo.MemberRepo;

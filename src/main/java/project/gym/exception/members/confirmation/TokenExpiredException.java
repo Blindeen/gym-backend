@@ -1,6 +1,8 @@
-package project.gym.exception;
+package project.gym.exception.members.confirmation;
 
 import lombok.Getter;
+import project.gym.exception.CustomException;
+
 import org.springframework.http.HttpStatus;
 
 @Getter
