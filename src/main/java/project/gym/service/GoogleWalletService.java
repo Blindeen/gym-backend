@@ -179,7 +179,6 @@ public class GoogleWalletService {
             GenericObject existingPassObject = getObjectRequest(objectSuffix);
             if (existingPassObject != null) {
                 existingPassObject = updateGenericObject(existingPassObject, firstName, lastName);
-                System.out.println(existingPassObject.getTextModulesData().get(0).getBody());
                 sendUpdateObjectRequest(objectSuffix, existingPassObject);
             }
         } catch (IOException ex) {

@@ -166,8 +166,6 @@ public class MemberService {
         PassBasics passBasics = PassBasics.valueOf(pass);
         String googleWalletToken;
         try {
-            System.out.println(member.getFirstName());
-            System.out.println(member.getLastName());
             googleWalletToken = googleWalletService.generateGoogleWalletPass(
                     "member_" + member.getId(),
                     passBasics.getUuid(),
