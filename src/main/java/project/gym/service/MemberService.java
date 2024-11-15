@@ -139,6 +139,9 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(newPassword));
         }
 
+        googleWalletService.updateGoogleWalletPass("member_" + member.getId(), member.getFirstName(),
+                member.getLastName());
+
         return memberRepo.save(member);
     }
 
@@ -163,6 +166,8 @@ public class MemberService {
         PassBasics passBasics = PassBasics.valueOf(pass);
         String googleWalletToken;
         try {
+            System.out.println(member.getFirstName());
+            System.out.println(member.getLastName());
             googleWalletToken = googleWalletService.generateGoogleWalletPass(
                     "member_" + member.getId(),
                     passBasics.getUuid(),

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -73,6 +74,18 @@ public class GoogleWalletService {
         return false;
     }
 
+    private GenericObject getObjectRequest(String objectSuffix) throws IOException {
+        GenericObject existingPassObject = null;
+
+        try {
+            existingPassObject = service.genericobject().get(String.format("%s.%s", issuerId, objectSuffix)).execute();
+        } catch (GoogleJsonResponseException ex) {
+            ex.printStackTrace();
+        }
+
+        return existingPassObject;
+    }
+
     private GenericObject createGenericObject(String objectSuffix, String passUuid, String firstName, String lastName) {
         LocalizedString cardTitle = new LocalizedString();
         cardTitle.setDefaultValue(new TranslatedString().setLanguage("en-US").setValue("Pass"));
@@ -107,6 +120,13 @@ public class GoogleWalletService {
         return newObject;
     }
 
+    private GenericObject updateGenericObject(GenericObject genericObject, String firstName, String lastName) {
+        TextModuleData memberTextModule = genericObject.getTextModulesData().get(0);
+        memberTextModule.setBody(String.format("%s %s", firstName, lastName));
+
+        return genericObject;
+    }
+
     private void sendCreateObjectRequest(String objectSuffix, String passUuid, String firstName, String lastName)
             throws IOException {
         GenericObject newObject = createGenericObject(objectSuffix, passUuid, firstName, lastName);
@@ -115,6 +135,10 @@ public class GoogleWalletService {
         } catch (GoogleJsonResponseException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void sendUpdateObjectRequest(String objectSuffix, GenericObject updatedObject) throws IOException {
+        service.genericobject().update(String.format("%s.%s", issuerId, objectSuffix), updatedObject).execute();
     }
 
     private String createJWTObject(String objectSuffix, String passUuid, String firstName, String lastName) {
@@ -146,5 +170,20 @@ public class GoogleWalletService {
 
         String token = createJWTObject(objectSuffix, passUuid, firstName, lastName);
         return token;
+    }
+
+    @Async
+    public void updateGoogleWalletPass(String objectSuffix, String firstName, String lastName) {
+        try {
+            credentials.refreshIfExpired();
+            GenericObject existingPassObject = getObjectRequest(objectSuffix);
+            if (existingPassObject != null) {
+                existingPassObject = updateGenericObject(existingPassObject, firstName, lastName);
+                System.out.println(existingPassObject.getTextModulesData().get(0).getBody());
+                sendUpdateObjectRequest(objectSuffix, existingPassObject);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }
