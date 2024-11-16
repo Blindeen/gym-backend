@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activities.ActivityResponse;
-import project.gym.dto.activities.CustomerActivity;
 import project.gym.dto.activities.CustomerActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.members.ConfirmAccountRequest;
