@@ -10,9 +10,9 @@ public class Endpoints {
     public static final String UPDATE_MEMBER = "/members/profile";
     public static final String UPLOAD_AVATAR = "/members/avatar";
     public static final String GET_PASS_INFO = "/members/pass";
-    public static final String MEMBER_ACTIVITIES = "/members/activities";
-    public static final String MEMBER_AVAILABLE_ACTIVITIES = "/members/available-activities";
     public static final String GET_TRAINERS = "/members/trainers";
+    public static final String GET_TRAINER_ACTIVITIES = "/members/trainers/activities";
+    public static final String GET_CUSTOMER_ACTIVITIES = "/members/customers/activities";
 
     public static final String CREATE_ACTIVITY = "/activities";
     public static final String GET_ACTIVITIES = "/activities";

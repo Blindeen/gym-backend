@@ -48,13 +48,13 @@ public class SecurityConfig {
                                                                 .requestMatchers(
                                                                                 UPDATE_ACTIVITY,
                                                                                 DELETE_ACTIVITY,
-                                                                                PREPARE_ADD_EDIT_ACTIVITY_FORM)
+                                                                                PREPARE_ADD_EDIT_ACTIVITY_FORM,
+                                                                                GET_TRAINER_ACTIVITIES)
                                                                 .hasRole(String.valueOf(Role.TRAINER))
                                                                 .requestMatchers(ENROLL_ACTIVITY, LEAVE_ACTIVITY,
-                                                                                MEMBER_AVAILABLE_ACTIVITIES)
+                                                                                GET_CUSTOMER_ACTIVITIES)
                                                                 .hasRole(String.valueOf(Role.CUSTOMER))
                                                                 .requestMatchers(UPDATE_MEMBER,
-                                                                                MEMBER_ACTIVITIES,
                                                                                 PREPARE_EDIT_PROFILE_FORM)
                                                                 .authenticated()
                                                                 .anyRequest()

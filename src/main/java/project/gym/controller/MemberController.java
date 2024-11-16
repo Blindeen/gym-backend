@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activities.ActivityResponse;
+import project.gym.dto.activities.CustomerActivity;
 import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.members.ConfirmAccountRequest;
 import project.gym.dto.members.UpdateMemberRequest;
@@ -105,23 +105,25 @@ public class MemberController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @GetMapping("/activities")
-    public ResponseEntity<Page<ActivityResponse>> getActivities(
-            @RequestHeader("Authorization") String token,
+    @GetMapping("/trainers/activities")
+    public ResponseEntity<Page<ActivityResponse>> getTrainerActivities(@RequestHeader("Authorization") String token,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "") String name) {
         Member member = jwtService.getMember(token);
-        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize, Sort.by("id"));
-        Page<ActivityResponse> responseBody = memberService.getMyActivities(name, member, pagination);
+        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
+        Page<ActivityResponse> responseBody = memberService.getTrainerActivities(member, name, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @GetMapping("/available-activities")
-    public ResponseEntity<List<ActivityResponse>> getAvailableActivities(
-            @RequestHeader("Authorization") String token) {
+    @GetMapping("/customers/activities")
+    public ResponseEntity<Page<CustomerActivity>> getCustomerActivities(@RequestHeader("Authorization") String token,
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "5") int pageSize,
+            @RequestParam(defaultValue = "") String name) {
         Member member = jwtService.getMember(token);
-        List<ActivityResponse> responseBody = memberService.getAvailableActivities(member);
+        Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
+        Page<CustomerActivity> responseBody = memberService.getCustomerActivities(member, name, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

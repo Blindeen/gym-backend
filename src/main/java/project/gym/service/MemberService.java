@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import project.gym.Utils;
 import project.gym.dto.activities.ActivityResponse;
+import project.gym.dto.activities.CustomerActivity;
 import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.members.ConfirmAccountRequest;
 import project.gym.dto.members.UpdateMemberRequest;
@@ -179,7 +180,7 @@ public class MemberService {
         return passBasics;
     }
 
-    public Page<ActivityResponse> getMyActivities(String name, Member member, Pageable pagination) {
+    public Page<ActivityResponse> getTrainerActivities(Member member, String name, Pageable pagination) {
         Role role = member.getRole();
         if (role == Role.TRAINER) {
             return activityRepo.findByTrainerAndNameContains(member, name, pagination)
@@ -190,9 +191,8 @@ public class MemberService {
         }
     }
 
-    public List<ActivityResponse> getAvailableActivities(Member member) {
-        return activityRepo.findByMembersNotContains(member)
-                .stream().map(ActivityResponse::valueOf).toList();
+    public Page<CustomerActivity> getCustomerActivities(Member member, String name, Pageable pagination) {
+        return activityRepo.findCustomerActivities(member.getId(), name, pagination);
     }
 
     public List<TrainerInfo> getTrainers() {
