@@ -24,6 +24,7 @@ import jakarta.validation.Valid;
 import project.gym.Utils;
 import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.activities.CustomerActivity;
+import project.gym.dto.activities.CustomerActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.members.ConfirmAccountRequest;
 import project.gym.dto.members.UpdateMemberRequest;
@@ -117,13 +118,13 @@ public class MemberController {
     }
 
     @GetMapping("/customers/activities")
-    public ResponseEntity<Page<CustomerActivity>> getCustomerActivities(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Page<CustomerActivityResponse>> getCustomerActivities(@RequestHeader("Authorization") String token,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize,
             @RequestParam(defaultValue = "") String name) {
         Member member = jwtService.getMember(token);
         Pageable pagination = PageRequest.of(pageNumber - 1, pageSize);
-        Page<CustomerActivity> responseBody = memberService.getCustomerActivities(member, name, pagination);
+        Page<CustomerActivityResponse> responseBody = memberService.getCustomerActivities(member, name, pagination);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

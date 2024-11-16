@@ -29,13 +29,13 @@ public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndS
     List<Activity> findByRoomAndDayOfWeek(Room room, DayOfWeek dayOfWeek);
 
     @Query(value = "SELECT " +
+            "a.id, " +
             "a.name, " +
             "a.day_of_week as dayOfWeek, " +
             "a.start_time as startTime, " +
             "a.duration_min as durationMin, " +
             "r.name as roomName, " +
-            "t.first_name as trainerFirstName, " +
-            "t.last_name as trainerLastName, " +
+            "concat(t.first_name, ' ', t.last_name) as trainer, " +
             "CASE WHEN am.members_id IS NOT NULL THEN true ELSE false END AS enrolled " +
             "FROM public.activity AS a " +
             "LEFT JOIN public.activity_members AS am ON a.id = am.activities_id AND am.members_id = :memberId " +

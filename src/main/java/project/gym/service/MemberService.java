@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import project.gym.Utils;
 import project.gym.dto.activities.ActivityResponse;
 import project.gym.dto.activities.CustomerActivity;
+import project.gym.dto.activities.CustomerActivityResponse;
 import project.gym.dto.cloudinary.UploadImageResponse;
 import project.gym.dto.members.ConfirmAccountRequest;
 import project.gym.dto.members.UpdateMemberRequest;
@@ -191,8 +192,8 @@ public class MemberService {
         }
     }
 
-    public Page<CustomerActivity> getCustomerActivities(Member member, String name, Pageable pagination) {
-        return activityRepo.findCustomerActivities(member.getId(), name, pagination);
+    public Page<CustomerActivityResponse> getCustomerActivities(Member member, String name, Pageable pagination) {
+        return activityRepo.findCustomerActivities(member.getId(), name, pagination).map(CustomerActivityResponse::valueOf);
     }
 
     public List<TrainerInfo> getTrainers() {
