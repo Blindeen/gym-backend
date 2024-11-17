@@ -42,7 +42,7 @@ public interface ActivityRepo extends CrudRepository<Activity, Long>, PagingAndS
             "INNER JOIN public.room as r ON a.room_id = r.id " +
             "INNER JOIN public.member as t ON a.trainer_id = t.id " +
             "WHERE a.name LIKE %:name% " +
-            "ORDER BY enrolled DESC, a.id", nativeQuery = true)
+            "ORDER BY a.id", nativeQuery = true)
     Page<CustomerActivity> findCustomerActivities(@Param("memberId") Long memberId, @Param("name") String name,
             Pageable pageable);
 }
